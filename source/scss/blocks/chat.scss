@@ -113,6 +113,7 @@
       width: 100%;
       color: $c-dark;
       background-color: $c-light;
+      word-break: break-word;
     }
   }
 
@@ -123,6 +124,7 @@
     p {
       color: $c-light;
       background-color: $c-purple;
+      word-break: break-word;
     }
   }
 }
@@ -183,26 +185,4 @@
 
 .chat__footer {
   margin-top: auto;
-
-  .form {
-    justify-content: flex-end;
-  }
-
-  .form__button {
-    flex-grow: unset;
-  }
-
-  .form__field {
-    animation: slideLeft ease 0.6s;
-  }
-}
-
-@keyframes slideLeft {
-  0% {
-    width: 0;
-  }
-
-  100% {
-    width: calc(100% - 21rem);
-  }
 }
