@@ -2,6 +2,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .form__label {
@@ -43,6 +44,7 @@
   border: 0;
   border-radius: 3rem;
   outline: none;
+  animation: slideFormFieldLeft ease 0.6s;
 
   &:focus {
     border: 1px solid $c-purple;
@@ -79,7 +81,7 @@
 }
 
 .form__button {
-  flex-grow: 1;
+  flex-grow: unset;
 
   @media (orientation: portrait) {
     position: relative;
