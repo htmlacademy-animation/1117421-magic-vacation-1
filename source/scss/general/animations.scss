@@ -19,3 +19,13 @@
     width: calc(100% - 21rem);
   }
 }
+
+@keyframes slideBackingUp {
+  0% {
+    height: 0;
+  }
+
+  100% {
+    height: 100%;
+  }
+}
