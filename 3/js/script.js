@@ -10341,14 +10341,31 @@ class FullPageScroll {
     this.changeActiveMenuItem();
     const back = document.querySelector(`.backing`);
     const currentScreen = document.querySelector(`.screen.active`);
-    if (currentScreen && currentScreen.id === this.SCREEN_NAMES.STORY && this.screenElements[this.activeScreen].id === this.SCREEN_NAMES.PRIZES) {
+    const isBack = this.isShowBackgroundBlock(this.screenElements[this.activeScreen].id);
+    if (isBack) {
       back.classList.add(`active`);
+    } else {
+      back.classList.remove(`active`);
+    }
+    if (currentScreen && currentScreen.id === this.SCREEN_NAMES.STORY && this.screenElements[this.activeScreen].id === this.SCREEN_NAMES.PRIZES) {
+      back.classList.add(`animate`);
       setTimeout(() => {
         this.toggleDisplay();
-        back.classList.remove(`active`);
+        back.classList.remove(`animate`);
       }, 600);
     } else {
       this.toggleDisplay();
+    }
+  }
+
+  isShowBackgroundBlock(name) {
+    switch (name) {
+      case this.SCREEN_NAMES.PRIZES:
+      case this.SCREEN_NAMES.RULES:
+      case this.SCREEN_NAMES.GAME:
+        return true;
+      default:
+        return false;
     }
   }
 
