@@ -139,7 +139,7 @@
   display: flex;
   align-items: center;
   opacity: 0;
-  transition: opacity 1.2s cubic-bezier(0.33, 1, 0.68, 1);
+  transition: opacity 1.2s cubic-bezier(0.5, 1, 0.89, 1);
 
   .loaded & {
     opacity: 1;
@@ -255,7 +255,7 @@
     display: block;
     color: inherit;
     padding: 0 0.5em 0.5em;
-    transition: color 0.3s ease;
+    transition: color 0.5s ease;
 
     &::after {
       content: "";
@@ -265,7 +265,7 @@
       height: 2px;
       background-color: $c-light;
       left: 0;
-      transition: width 0.4s ease;
+      transition: width 0.5s ease;
 
       @media (min-width: $stop-scaling) {
         left: -5px;
@@ -285,8 +285,9 @@
       }
     }
 
-    &.active {
+    .loaded &.active {
       &::after {
+        transition-timing-function: ease-in;
         width: 100%;
       }
     }
