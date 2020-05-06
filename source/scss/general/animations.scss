@@ -10,6 +10,81 @@
   }
 }
 
+@keyframes fadeRulesLeadUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rulesItemSlideLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes rulesItemBeforeFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  75% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rulesBtnSlideLeft {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.3);
+    border-radius: 50%;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+    border-radius: 3.5rem;
+  }
+}
+
+@keyframes rulesBtnTextShow {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes rulesItemBeforeTextShow {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes slideFormFieldLeft {
   0% {
     width: 0;
