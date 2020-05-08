@@ -177,16 +177,12 @@
       top: 1rem;
       width: 2.5rem;
       height: 2.5rem;
-      line-height: 3rem;
-      font-size: 1.4rem;
     }
 
     @media (max-width: $mobile) and (orientation: landscape) {
       top: 0.6rem;
       width: 2.5rem;
       height: 2.5rem;
-      line-height: 3rem;
-      font-size: 1.4rem;
     }
   }
 
@@ -207,6 +203,22 @@
     animation-duration: 0.4s;
     animation-timing-function: cubic-bezier(0.12, 0, 0.39, 0);
     animation-fill-mode: both;
+
+    @media (max-width: $tablet) and (orientation: portrait) {
+      top: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      line-height: 3rem;
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: $mobile) and (orientation: landscape) {
+      top: 0.6rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      line-height: 3rem;
+      font-size: 1.4rem;
+    }
   }
 
   @for $i from 1 through 4 {
