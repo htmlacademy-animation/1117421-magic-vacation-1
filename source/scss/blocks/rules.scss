@@ -59,7 +59,7 @@
   text-transform: uppercase;
   font-size: 2.4rem;
   line-height: 1.2;
-  animation-name: fadeRulesLeadUp;
+  animation-name: fadeInUp;
   animation-duration: 0.6s;
   animation-timing-function: ease-in;
 
@@ -147,47 +147,17 @@
     font-size: 1.2rem;
   }
 
-  &:nth-child(1) {
-    &::before {
-      animation-delay: 0.6s;
-    }
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) {
+      &::before {
+        animation-delay: (0.6s + 0.2 * ($i - 1));
+      }
 
-    &::after {
-      animation-delay: 0.8s;
-    }
-  }
-
-  &:nth-child(2) {
-    &::before {
-      animation-delay: 0.8s;
-    }
-
-    &::after {
-      animation-delay: 1s;
+      &::after {
+        animation-delay: (0.9s + 0.2 * ($i - 1));
+      }
     }
   }
-
-  &:nth-child(3) {
-    &::before {
-      animation-delay: 1s;
-    }
-
-    &::after {
-      animation-delay: 1.2s;
-    }
-  }
-
-
-  &:nth-child(4) {
-    &::before {
-      animation-delay: 1.2s;
-    }
-
-    &::after {
-      animation-delay: 1.4s;
-    }
-  }
-
 
   &::before {
     content: "";
@@ -198,10 +168,10 @@
     height: 4.5rem;
     background-color: $c-purple;
     border-radius: 50%;
-    animation-name: rulesItemBeforeFadeIn;
+    animation-name: fadeInScaleGrow;
     animation-duration: 0.6s;
     animation-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
-    animation-fill-mode: backwards;
+    animation-fill-mode: both;
 
     @media (max-width: $tablet) and (orientation: portrait) {
       top: 1rem;
@@ -233,33 +203,23 @@
     font-size: 2.4rem;
     line-height: 5rem;
     text-align: center;
-    animation-name: rulesItemBeforeTextShow;
+    animation-name: fadeIn;
     animation-duration: 0.4s;
     animation-timing-function: cubic-bezier(0.12, 0, 0.39, 0);
-    animation-fill-mode: backwards;
+    animation-fill-mode: both;
   }
 
-  &:nth-child(1) p {
-    animation-delay: 0.8s;
-  }
-
-  &:nth-child(2) p {
-    animation-delay: 1s;
-  }
-
-  &:nth-child(3) p {
-    animation-delay: 1.2s;
-  }
-
-  &:nth-child(4) p {
-    animation-delay: 1.4s;
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) p {
+      animation-delay: (0.8s + 0.2 * ($i - 1));
+    }
   }
 
   p {
     margin: 0;
-    animation-name: rulesItemSlideLeft;
+    animation-name: fadeInLeft;
     animation-duration: 1s;
-    animation-fill-mode: backwards;
+    animation-fill-mode: both;
 
     @media (max-width: $tablet) and (orientation: portrait) {
       min-height: calc(1.4rem * 2.2);
@@ -273,11 +233,11 @@
   right: 5.6rem;
 
   span {
-    animation-name: rulesBtnTextShow;
+    animation-name: fadeIn;
     animation-duration: 0.6s;
     animation-delay: 2.2s;
     animation-timing-function: ease-in;
-    animation-fill-mode: backwards;
+    animation-fill-mode: both;
   }
 
 
@@ -305,13 +265,14 @@
 .rules__link.btn {
   &::before {
     top: 0;
-    left: 0;
+    right: 0;
+    left: unset;
     transform: none;
     transform-origin: right;
-    animation-name: rulesBtnSlideLeft;
+    animation-name: fadeInSlideLeft;
     animation-duration: 0.6s;
     animation-delay: 1.8s;
     animation-timing-function: ease-in;
-    animation-fill-mode: backwards;
+    animation-fill-mode: both;
   }
 }

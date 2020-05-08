@@ -1,16 +1,14 @@
 @keyframes fadeIn {
   0% {
     opacity: 0;
-    transform: translateY(30px);
   }
 
   100% {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
-@keyframes fadeRulesLeadUp {
+@keyframes fadeInUp {
   0% {
     opacity: 0;
     transform: translateY(30px);
@@ -22,7 +20,7 @@
   }
 }
 
-@keyframes rulesItemSlideLeft {
+@keyframes fadeInLeft {
   0% {
     opacity: 0;
     transform: translateX(30px);
@@ -34,7 +32,7 @@
   }
 }
 
-@keyframes rulesItemBeforeFadeIn {
+@keyframes fadeInScaleGrow {
   0% {
     opacity: 0;
     transform: scale(0);
@@ -51,41 +49,19 @@
   }
 }
 
-@keyframes rulesBtnSlideLeft {
+@keyframes fadeInSlideLeft {
   0% {
     opacity: 0;
-    transform: scaleX(0.3);
-    border-radius: 50%;
+    max-width: 30%;
   }
 
   100% {
     opacity: 1;
-    transform: scaleX(1);
-    border-radius: 3.5rem;
+    max-width: 100%;
   }
 }
 
-@keyframes rulesBtnTextShow {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes rulesItemBeforeTextShow {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes slideFormFieldLeft {
+@keyframes changeWidthSlideLeft {
   0% {
     width: 0;
   }
@@ -95,7 +71,7 @@
   }
 }
 
-@keyframes slideBackingUp {
+@keyframes changeHeightSlideUp {
   0% {
     height: 0;
   }
