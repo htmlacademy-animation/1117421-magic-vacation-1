@@ -44,7 +44,8 @@
   border: 0;
   border-radius: 3rem;
   outline: none;
-  animation: slideFormFieldLeft ease 0.6s;
+  animation-name: changeWidthSlideLeft;
+  animation-duration: 0.6s;
 
   &:focus {
     border: 1px solid $c-purple;

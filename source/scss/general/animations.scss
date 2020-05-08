@@ -1,6 +1,16 @@
 @keyframes fadeIn {
   0% {
     opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
     transform: translateY(30px);
   }
 
@@ -10,7 +20,48 @@
   }
 }
 
-@keyframes slideFormFieldLeft {
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInScaleGrow {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  75% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInSlideLeft {
+  0% {
+    opacity: 0;
+    max-width: 30%;
+  }
+
+  100% {
+    opacity: 1;
+    max-width: 100%;
+  }
+}
+
+@keyframes changeWidthSlideLeft {
   0% {
     width: 0;
   }
@@ -20,7 +71,7 @@
   }
 }
 
-@keyframes slideBackingUp {
+@keyframes changeHeightSlideUp {
   0% {
     height: 0;
   }

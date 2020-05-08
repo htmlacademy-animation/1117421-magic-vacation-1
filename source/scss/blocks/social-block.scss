@@ -17,7 +17,7 @@
   height: 4rem;
   color: $c-dark;
   border-radius: 50%;
-  transition: all 0.4s ease-out;
+  transition: color 0.4s ease-out;
 
   @media (max-width: $tablet) and (orientation: portrait) {
     display: none;
@@ -36,7 +36,8 @@
     background-color: $c-light;
     border: 2px solid $c-light;
     z-index: -1;
-    transition: all 0.4s ease;
+    transition-property: width, height;
+    transition-duration: 0.4s;
   }
 
   svg {
@@ -91,7 +92,7 @@
   margin-top: 1.5rem;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.6s ease;
+  transition: opacity 0.6s ease;
 
   @media (min-width: $stop-scaling) {
     margin-top: 15px;
@@ -152,15 +153,21 @@
     transform: translateY(10px);
 
     &:first-child {
-      transition: all 0.4s ease 0.2s;
+      transition-property: transform, opacity;
+      transition-duration: 0.4s;
+      transition-delay: 0.2s;
     }
 
     &:nth-child(2) {
-      transition: all 0.4s ease 0.4s;
+      transition-property: transform, opacity;
+      transition-duration: 0.5s;
+      transition-delay: 0.4s;
     }
 
     &:nth-child(3) {
-      transition: all 0.4s ease 0.6s;
+      transition-property: transform, opacity;
+      transition-duration: 0.6s;
+      transition-delay: 0.6s;
     }
 
     .social-block--active & {
@@ -190,7 +197,7 @@
   color: $c-light;
   border: 2px solid transparent;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
 
   @media (min-width: $stop-scaling) {
     width: 40px;
