@@ -52,10 +52,10 @@ export default class FullPageScroll {
     }
     if (currentScreen && currentScreen.id === this.SCREEN_NAMES.STORY && this.screenElements[this.activeScreen].id === this.SCREEN_NAMES.PRIZES) {
       back.classList.add(`animate`);
-      setTimeout(() => {
+      back.addEventListener(`animationend`, () => {
         this.toggleDisplay();
         back.classList.remove(`animate`);
-      }, 600);
+      });
     } else {
       this.toggleDisplay();
     }

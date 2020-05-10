@@ -51,12 +51,12 @@
     font-size: 5rem;
   }
 
-  .text__word {
+  .text-word {
     @include text-word;
     padding-top: 25px;
   }
 
-  &.active .text__word span {
+  &.active .text-word span {
     transform: translate3d(0, 0, 0);
   }
 }
@@ -180,13 +180,13 @@
     font-size: 48px;
   }
 
-  .text__word {
+  .text-word {
     @include text-word;
     padding-top: 10px;
     padding-right: 5px;
   }
 
-  &.active .text__word span {
+  &.active .text-word span {
     transform: translate3d(0, 0, 0);
   }
 }
