@@ -1613,15 +1613,15 @@ img {
   @media (max-width: 768px) and (orientation: landscape) {
     .intro__title {
       font-size: 5rem; } }
-  .intro__title .text__word {
+  .intro__title .text-word {
     overflow: hidden;
     display: inline-block;
     vertical-align: middle;
     padding-top: 25px; }
-    .intro__title .text__word span {
+    .intro__title .text-word span {
       transform: translate3d(0, 1.2em, 0);
       display: inline-block; }
-  .intro__title.active .text__word span {
+  .intro__title.active .text-word span {
     transform: translate3d(0, 0, 0); }
 
 .intro__content {
@@ -1721,16 +1721,16 @@ img {
     .intro__date {
       margin: 0 0 0 -5px;
       font-size: 48px; } }
-  .intro__date .text__word {
+  .intro__date .text-word {
     overflow: hidden;
     display: inline-block;
     vertical-align: middle;
     padding-top: 10px;
     padding-right: 5px; }
-    .intro__date .text__word span {
+    .intro__date .text-word span {
       transform: translate3d(0, 1.2em, 0);
       display: inline-block; }
-  .intro__date.active .text__word span {
+  .intro__date.active .text-word span {
     transform: translate3d(0, 0, 0); }
 
 .page-header {
