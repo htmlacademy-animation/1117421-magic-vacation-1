@@ -58,3 +58,14 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@mixin text-word {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+
+  span {
+    transform: translate3d(0, 1.2em, 0);
+    display: inline-block;
+  }
+}
