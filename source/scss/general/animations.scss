@@ -80,3 +80,27 @@
     height: 100%;
   }
 }
+
+@keyframes fadeInSlideRotateLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(200%) rotate(-360deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes fadeInSlideRotateRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-200%) rotate(360deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
