@@ -36,6 +36,13 @@
   left: 0;
   right: 0;
   z-index: 1;
+
+  ul {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
 }
 
 .screen__footer {
@@ -240,6 +247,10 @@
     align-items: flex-start;
     justify-content: center;
     margin: 0;
+    animation-name: fadeIn;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
   }
 
   svg {

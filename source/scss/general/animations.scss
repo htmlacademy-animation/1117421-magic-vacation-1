@@ -11,7 +11,7 @@
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(3rem);
   }
 
   100% {
@@ -23,7 +23,7 @@
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(3rem);
   }
 
   100% {
@@ -52,39 +52,39 @@
 @keyframes fadeInSlideLeft {
   0% {
     opacity: 0;
-    max-width: 30%;
+    transform: scaleX(0.3);
   }
 
   100% {
     opacity: 1;
-    max-width: 100%;
+    transform: scaleX(1);
   }
 }
 
 @keyframes changeWidthSlideLeft {
   0% {
-    width: 0;
+    transform: scaleX(0.3);
   }
 
   100% {
-    width: calc(100% - 21rem);
+    transform: scaleX(1);
   }
 }
 
-@keyframes changeHeightSlideUp {
+@keyframes slideUp {
   0% {
-    height: 0;
+    transform: translateY(110%);
   }
 
   100% {
-    height: 100%;
+    transform: translateY(0);
   }
 }
 
 @keyframes fadeInSlideRotateLeft {
   0% {
     opacity: 0;
-    transform: translateX(200%) rotate(-360deg);
+    transform: translateX(5rem) rotate(360deg);
   }
 
   100% {
@@ -96,7 +96,7 @@
 @keyframes fadeInSlideRotateRight {
   0% {
     opacity: 0;
-    transform: translateX(-200%) rotate(360deg);
+    transform: translateX(-5rem) rotate(-360deg);
   }
 
   100% {

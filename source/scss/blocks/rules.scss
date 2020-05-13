@@ -24,13 +24,23 @@
 }
 
 .rules__title {
-  margin: 0 0 5rem;
+  margin: -0.6rem 0 5rem;
   text-transform: uppercase;
   font-family: $font-alt;
   font-weight: 400;
   font-size: 4.8rem;
   line-height: 0.906;
   letter-spacing: -0.04em;
+
+  .text-word {
+    @include text-word;
+    padding-top: 0.6rem;
+    padding-right: 0.6rem;
+  }
+
+  &.active .text-word span {
+    transform: translate3d(0, 0, 0);
+  }
 
   @media (min-width: $stop-scaling) {
     margin-bottom: 50px;
@@ -60,8 +70,10 @@
   font-size: 2.4rem;
   line-height: 1.2;
   animation-name: fadeInUp;
-  animation-duration: 0.6s;
-  animation-timing-function: ease-in;
+  animation-duration: 1s;
+  animation-delay: 0.7s;
+  animation-fill-mode: both;
+  animation-timing-function: ease;
 
   @media (min-width: $stop-scaling) {
     margin-left: 58px;
@@ -150,11 +162,11 @@
   @for $i from 1 through 4 {
     &:nth-child(#{$i}) {
       &::before {
-        animation-delay: (0.6s + 0.2 * ($i - 1));
+        animation-delay: (1s + 0.2 * ($i - 1));
       }
 
       &::after {
-        animation-delay: (0.9s + 0.2 * ($i - 1));
+        animation-delay: (1.3s + 0.2 * ($i - 1));
       }
     }
   }
@@ -223,7 +235,7 @@
 
   @for $i from 1 through 4 {
     &:nth-child(#{$i}) p {
-      animation-delay: (0.8s + 0.2 * ($i - 1));
+      animation-delay: (1.2s + 0.2 * ($i - 1));
     }
   }
 
@@ -247,7 +259,7 @@
   span {
     animation-name: fadeIn;
     animation-duration: 0.6s;
-    animation-delay: 2.2s;
+    animation-delay: 2.6s;
     animation-timing-function: ease-in;
     animation-fill-mode: both;
   }
@@ -282,8 +294,8 @@
     transform: none;
     transform-origin: right;
     animation-name: fadeInSlideLeft;
-    animation-duration: 0.6s;
-    animation-delay: 1.8s;
+    animation-duration: 0.4s;
+    animation-delay: 2.2s;
     animation-timing-function: ease-in;
     animation-fill-mode: both;
   }
