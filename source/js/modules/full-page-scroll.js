@@ -70,6 +70,12 @@ export default class FullPageScroll {
   toggleDisplay() {
     this.changeVisibilityDisplay();
     this.emitChangeDisplayEvent();
+    const primaryAwardWrap = document.querySelector(`.prizes__item--journeys .prizes__icon`);
+    if (this.screenElements[this.activeScreen].id === screenNames.PRIZES) {
+      primaryAwardWrap.innerHTML = `<picture><source srcset="img/prize1-mob.svg?id=${Math.random()}" media="(orientation: portrait)"><img src="img/primary-award.svg?id=${Math.random()}"></picture>`;
+    } else {
+      primaryAwardWrap.innerHTML = ``;
+    }
   }
 
   changeVisibilityDisplay() {
