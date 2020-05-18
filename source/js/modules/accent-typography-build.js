@@ -1,19 +1,19 @@
 export default class AccentTypographyBuild {
-  constructor(elementSelector, timer, classForActivate, property, offsets) {
+  constructor(elementSelector, timer, classForActivate, property) {
     this._elementSelector = elementSelector;
     this._timer = timer;
     this._classForActivate = classForActivate;
     this._property = property;
     this._element = document.querySelector(this._elementSelector);
-    this._timeOffsets = offsets;
+    this._timeOffsets = [0, 30, 50, 80, 100, 120, 150];
 
     this.prePareText();
   }
 
-  createElement(letter, wordNumber, letterNumber) {
+  createElement(letter) {
     const span = document.createElement(`span`);
     span.textContent = letter;
-    span.style.transition = `${this._property} ${this._timer}ms ease-out ${this._timeOffsets ? this._timeOffsets[wordNumber][letterNumber] : 0}ms`;
+    span.style.transition = `${this._property} ${this._timer}ms ease-out ${this._timeOffsets[Math.floor(Math.random() * 7)]}ms`;
     return span;
   }
 
@@ -23,9 +23,9 @@ export default class AccentTypographyBuild {
     }
     const text = this._element.textContent.trim().split(` `).filter((letter) => letter !== ``);
 
-    const content = text.reduce((fragmentParent, word, wordNumber) => {
-      const wordElement = Array.from(word).reduce((fragment, letter, letterNumber) => {
-        fragment.appendChild(this.createElement(letter, wordNumber, letterNumber));
+    const content = text.reduce((fragmentParent, word) => {
+      const wordElement = Array.from(word).reduce((fragment, letter) => {
+        fragment.appendChild(this.createElement(letter));
         return fragment;
       }, document.createDocumentFragment());
       const wordContainer = document.createElement(`span`);

@@ -40,18 +40,20 @@ export default class FullPageScroll {
     const back = document.querySelector(`.backing`);
     const currentScreen = document.querySelector(`.screen.active`);
     const isBack = this.isShowBackgroundBlock(this.screenElements[this.activeScreen].id);
+
     if (isBack) {
       back.classList.add(`active`);
     } else {
       back.classList.remove(`active`);
     }
+
     if (currentScreen && currentScreen.id === screenNames.STORY && this.screenElements[this.activeScreen].id === screenNames.PRIZES) {
       back.classList.add(`animate`);
       back.addEventListener(`animationend`, () => {
         this.toggleDisplay();
         back.classList.remove(`animate`);
       });
-    } else {
+    } else if (currentScreen && currentScreen.id !== this.screenElements[this.activeScreen].id || !currentScreen) {
       this.toggleDisplay();
     }
   }
