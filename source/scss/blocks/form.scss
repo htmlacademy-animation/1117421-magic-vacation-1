@@ -44,8 +44,12 @@
   border: 0;
   border-radius: 3rem;
   outline: none;
-  animation-name: changeWidthSlideLeft;
-  animation-duration: 0.6s;
+  transform-origin: 100%;
+
+  .active & {
+    animation-name: changeWidthSlideLeft;
+    animation-duration: 0.4s;
+  }
 
   &:focus {
     border: 1px solid $c-purple;

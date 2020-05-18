@@ -23,13 +23,22 @@
 }
 
 .prizes__title {
-  margin: 0 0 6rem;
+  margin: -0.6rem 0 6rem;
   text-transform: uppercase;
   font-family: $font-alt;
   font-weight: 400;
   font-size: 4.8rem;
   line-height: 0.906;
   letter-spacing: -0.04em;
+
+  .text-word {
+    @include text-word;
+    padding-top: 0.6rem;
+  }
+
+  &.active .text-word span {
+    transform: translate3d(0, 0, 0);
+  }
 
   @media (min-width: $stop-scaling) {
     font-size: 48px;
@@ -58,6 +67,10 @@
   text-transform: uppercase;
   font-size: 2.4rem;
   line-height: 1.2;
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-delay: 0.7s;
+  animation-fill-mode: both;
 
   @media (min-width: $stop-scaling) {
     margin-left: 58px;

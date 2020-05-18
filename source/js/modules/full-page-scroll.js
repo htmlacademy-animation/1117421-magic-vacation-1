@@ -1,15 +1,10 @@
 import throttle from 'lodash/throttle';
+import {screenNames} from "./utils";
+import {animateText} from "./text-animate";
 
 export default class FullPageScroll {
   constructor() {
     this.THROTTLE_TIMEOUT = 2000;
-    this.SCREEN_NAMES = {
-      TOP: `top`,
-      STORY: `story`,
-      PRIZES: `prizes`,
-      RULES: `rules`,
-      GAME: `game`,
-    };
 
     this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
     this.menuElements = document.querySelectorAll(`.page-header__menu .js-menu-link`);
@@ -50,7 +45,7 @@ export default class FullPageScroll {
     } else {
       back.classList.remove(`active`);
     }
-    if (currentScreen && currentScreen.id === this.SCREEN_NAMES.STORY && this.screenElements[this.activeScreen].id === this.SCREEN_NAMES.PRIZES) {
+    if (currentScreen && currentScreen.id === screenNames.STORY && this.screenElements[this.activeScreen].id === screenNames.PRIZES) {
       back.classList.add(`animate`);
       back.addEventListener(`animationend`, () => {
         this.toggleDisplay();
@@ -63,9 +58,9 @@ export default class FullPageScroll {
 
   isShowBackgroundBlock(name) {
     switch (name) {
-      case this.SCREEN_NAMES.PRIZES:
-      case this.SCREEN_NAMES.RULES:
-      case this.SCREEN_NAMES.GAME:
+      case screenNames.PRIZES:
+      case screenNames.RULES:
+      case screenNames.GAME:
         return true;
       default:
         return false;
@@ -75,6 +70,12 @@ export default class FullPageScroll {
   toggleDisplay() {
     this.changeVisibilityDisplay();
     this.emitChangeDisplayEvent();
+    const primaryAwardWrap = document.querySelector(`.prizes__item--journeys .prizes__icon`);
+    if (this.screenElements[this.activeScreen].id === screenNames.PRIZES) {
+      primaryAwardWrap.innerHTML = `<picture><source srcset="img/prize1-mob.svg?id=${Math.random()}" media="(orientation: portrait)"><img src="img/primary-award.svg?id=${Math.random()}"></picture>`;
+    } else {
+      primaryAwardWrap.innerHTML = ``;
+    }
   }
 
   changeVisibilityDisplay() {
@@ -84,6 +85,7 @@ export default class FullPageScroll {
     });
     this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
     this.screenElements[this.activeScreen].classList.add(`active`);
+    animateText(this.screenElements[this.activeScreen].id);
   }
 
   changeActiveMenuItem() {
