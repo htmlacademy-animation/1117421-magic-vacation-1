@@ -1,6 +1,7 @@
 import throttle from 'lodash/throttle';
 import {screenNames} from "./utils";
 import {animateText} from "./text-animate";
+import {animatePrizes} from "./prizes-animate";
 
 export default class FullPageScroll {
   constructor() {
@@ -40,18 +41,20 @@ export default class FullPageScroll {
     const back = document.querySelector(`.backing`);
     const currentScreen = document.querySelector(`.screen.active`);
     const isBack = this.isShowBackgroundBlock(this.screenElements[this.activeScreen].id);
+
     if (isBack) {
       back.classList.add(`active`);
     } else {
       back.classList.remove(`active`);
     }
+
     if (currentScreen && currentScreen.id === screenNames.STORY && this.screenElements[this.activeScreen].id === screenNames.PRIZES) {
       back.classList.add(`animate`);
       back.addEventListener(`animationend`, () => {
         this.toggleDisplay();
         back.classList.remove(`animate`);
       });
-    } else {
+    } else if (currentScreen && currentScreen.id !== this.screenElements[this.activeScreen].id || !currentScreen) {
       this.toggleDisplay();
     }
   }
@@ -70,12 +73,7 @@ export default class FullPageScroll {
   toggleDisplay() {
     this.changeVisibilityDisplay();
     this.emitChangeDisplayEvent();
-    const primaryAwardWrap = document.querySelector(`.prizes__item--journeys .prizes__icon`);
-    if (this.screenElements[this.activeScreen].id === screenNames.PRIZES) {
-      primaryAwardWrap.innerHTML = `<picture><source srcset="img/prize1-mob.svg?id=${Math.random()}" media="(orientation: portrait)"><img src="img/primary-award.svg?id=${Math.random()}"></picture>`;
-    } else {
-      primaryAwardWrap.innerHTML = ``;
-    }
+    animatePrizes(this.screenElements[this.activeScreen].id === screenNames.PRIZES);
   }
 
   changeVisibilityDisplay() {
