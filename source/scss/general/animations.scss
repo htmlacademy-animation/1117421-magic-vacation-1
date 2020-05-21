@@ -104,3 +104,9 @@
     transform: translateX(0) rotate(0);
   }
 }
+
+@keyframes slideBack {
+  to {
+    transform: translateX(0);
+  }
+}

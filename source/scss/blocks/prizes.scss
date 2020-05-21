@@ -142,9 +142,9 @@
   &--journeys {
     .prizes__icon {
       position: relative;
-      left: -5.9rem;
+      left: -3.9rem;
       bottom: -1.4rem;
-      width: 26.8rem;
+      width: 24rem;
 
       @media (min-width: $stop-scaling) {
         left: -59px;
@@ -182,7 +182,10 @@
     }
 
     .prizes__icon {
-      width: 18.8rem;
+      position: relative;
+      bottom: -1.4rem;
+      left: -1.4rem;
+      width: 25rem;
 
       @media (min-width: $stop-scaling) {
         width: 188px;
@@ -209,7 +212,10 @@
     }
 
     .prizes__icon {
-      width: 26rem;
+      position: relative;
+      bottom: -1.4rem;
+      left: -1.4rem;
+      width: 25rem;
 
       @media (min-width: $stop-scaling) {
         width: 260px;
@@ -340,6 +346,80 @@
     @media (max-width: $mobile) and (orientation: landscape) {
       width: 0.5rem;
       height: 0.5rem;
+    }
+  }
+}
+
+.prizes__item--animate {
+  &.prizes__item--journeys {
+    opacity: 0;
+    transform: translateX(calc(100% + 7.5rem));
+    animation-name: fadeIn, slideBack;
+    animation-duration: 1s, 0.4s;
+    animation-delay: 0s, 5s;
+    animation-timing-function: ease-out, ease-out;
+    animation-fill-mode: both, both;
+
+    .prizes__desc {
+      opacity: 0;
+      animation-name: fadeIn;
+      animation-duration: 1s;
+      animation-delay: 4.4s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+
+      span {
+        animation-name: fadeInLeft;
+        animation-duration: 0.4s;
+        animation-delay: 4.4s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: both;
+      }
+    }
+  }
+
+  &.prizes__item--cases {
+    opacity: 0;
+    animation-name: fadeIn;
+    animation-duration: 1s;
+    animation-delay: 5.3s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+
+    .prizes__desc {
+      opacity: 0;
+      animation-name: fadeIn;
+      animation-duration: 1s;
+      animation-delay: 6s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+
+      span {
+        animation-name: fadeInLeft;
+        animation-duration: 0.4s;
+        animation-delay: 6s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: both;
+      }
+    }
+  }
+
+  &.prizes__item--codes {
+    .prizes__desc {
+      opacity: 0;
+      animation-name: fadeIn;
+      animation-duration: 1s;
+      animation-delay: 9.5s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+
+      span {
+        animation-name: fadeInLeft;
+        animation-duration: 0.4s;
+        animation-delay: 9.5s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: both;
+      }
     }
   }
 }

@@ -359,8 +359,8 @@
           attributeName="transform"
           type="translate"
           values="400 20; 0 20"
-          dur="3s"
-          repeatCount="1"
+          dur="5s"
+          repeatCount="indefinite"
           additive="sum"
           fill="freeze"/>
         <line x1="28.18" y1="38.34" x2="91.09" y2="38.34" fill="none" stroke="#fff" stroke-linecap="round"
@@ -396,6 +396,7 @@
       repeatCount="1"
       fill="freeze"/>
     <animateTransform
+      id="skiSlide"
       begin="hillTransform.begin"
       attributeName="transform"
       type="translate"
@@ -407,10 +408,16 @@
       fill="freeze"/>
     <path
       d="M91.14,327.79a2.2,2.2,0,0,1-2-2.36l13.66-193.17c1.1-15.49-4.8-21.92-8.75-24.47a1.35,1.35,0,0,1,.53-2.45C103,104,122.18,104,120,134.19L106.43,326.67a2.2,2.2,0,0,1-2.35,2Z"
-      transform="translate(-54.48 -104.9)" fill="#fff"/>
+      transform="translate(-54.48 -104.9)" fill="#fff">
+      <animateTransform begin="skiSlide.end + 1s" attributeName="transform" type="rotate" values="0 104 300; -1 104 300; 0 104 300; -1 104 300; 0 104 300;"
+                        dur="4s" calcMode="paced" additive="sum" repeatCount="indefinite" />
+    </path>
     <path
       d="M124.5,328.17a2.2,2.2,0,0,1-2.17-2.23l2.24-193.63c0.19-15.53-6.07-21.61-10.16-23.91a1.35,1.35,0,0,1,.39-2.47c8.36-1.9,27.49-3,27.15,27.28l-2.25,192.93a2.2,2.2,0,0,1-2.22,2.18Z"
-      transform="translate(-54.48 -104.9)" fill="#fff"/>
+      transform="translate(-54.48 -104.9)" fill="#fff">
+      <animateTransform begin="skiSlide.end + 1s" attributeName="transform" type="rotate" values="0 104 300; -1 104 300; 0 104 300; -1 104 300; 0 104 300;"
+                        dur="4s" calcMode="paced" additive="sum" repeatCount="indefinite" />
+    </path>
   </g>
   <g opacity="0">
     <animate
@@ -486,6 +493,7 @@
       fill="freeze"/>
     <g>
       <animateTransform
+        id="flowerSwing"
         begin="flowerShow.end - 0.3s"
         attributeName="transform"
         type="rotate"
@@ -502,6 +510,24 @@
         dur="1s"
         additive="sum"
         repeatCount="1"
+        fill="freeze"/>
+      <animateTransform
+        begin="flowerSwing.end + 0.5s"
+        attributeName="transform"
+        type="rotate"
+        values="0 182 296; 2 182 296; 0 182 296; 2 182 296; 0 182 296"
+        dur="4s"
+        additive="sum"
+        repeatCount="indefinite"
+        fill="freeze"/>
+      <animateTransform
+        begin="flowerSwing.end + 0.5s"
+        attributeName="transform"
+        type="translate"
+        values="0 0; -2 3; 0 0; -2 3; 0 0"
+        dur="4s"
+        additive="sum"
+        repeatCount="indefinite"
         fill="freeze"/>
       <path
         d="M79.18,194A131,131,0,0,1,94.77,220.9a255,255,0,0,1-20.08-23.55,259,259,0,0,1-17.07-25.88A131.72,131.72,0,0,1,79.18,194"
