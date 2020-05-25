@@ -14,6 +14,23 @@ export default () => {
         });
         targetEl[0].classList.add(`screen--show`);
         targetEl[0].classList.remove(`screen--hidden`);
+
+        const targetTitle = document.querySelector(`.screen--show .result__title`);
+        const targetSvg = targetTitle.querySelector(`svg`);
+        const copySvg = targetSvg.cloneNode(true);
+        const targetTitlePathList = copySvg.querySelectorAll(`path`);
+
+        targetTitlePathList.forEach((path) => {
+          const pathLength = path.getTotalLength();
+          path.setAttribute(`stroke-dasharray`, `0 ${pathLength / 3} ${pathLength / 6} ${pathLength / 9} ${pathLength / 3} ${pathLength / 6} ${pathLength / 9}`);
+
+          const pathAnimate = path.querySelector(`.result__anim`);
+          pathAnimate.setAttribute(`from`, `0 ${pathLength / 3} ${pathLength / 6} ${pathLength / 9} ${pathLength / 3} ${pathLength / 6} ${pathLength / 9}`);
+          pathAnimate.setAttribute(`to`, `0 0 ${pathLength / 2} 0 ${pathLength / 2} 0 ${pathLength / 2}`);
+        });
+
+        targetSvg.remove();
+        targetTitle.appendChild(copySvg);
       });
     }
 

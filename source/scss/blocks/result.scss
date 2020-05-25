@@ -57,6 +57,10 @@
 .result__title {
   margin: 0 auto 2rem;
   color: $c-light;
+  animation-name: fadeInScaleReduce;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
 
   @media (min-width: $stop-scaling) {
     margin: 0 auto 20px;
@@ -242,9 +246,22 @@
 
 .result--negative {
   .result__title {
-    margin-top: 9.5rem;
+    margin-top: 4rem;
     width: 66.5rem;
-    height: 11.3rem;
+    height: 22rem;
+    animation-name: none;
+
+    path {
+      animation-name: bounce;
+      animation-duration: 1s;
+      animation-fill-mode: both;
+
+      @for $i from 1 through 9 {
+        &:nth-child(#{$i}) {
+          animation-delay: (0.05s * ($i - 1));
+        }
+      }
+    }
 
     @media (min-width: $stop-scaling) {
       margin-top: 95px;
