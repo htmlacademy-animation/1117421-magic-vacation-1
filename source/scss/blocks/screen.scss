@@ -355,7 +355,6 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: $c-dark;
   opacity: 0;
   pointer-events: none;
 
@@ -367,6 +366,7 @@
 
 .screen--rules,
 .screen--game,
-.screen--prizes {
+.screen--prizes,
+.screen--result {
   z-index: 2;
 }

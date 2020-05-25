@@ -237,8 +237,24 @@
 }
 
 .prizes__icon {
+  &--mobile {
+    display: none;
+  }
+
+  &--desktop {
+    display: block;
+  }
+
   @media (max-width: $tablet) and (orientation: portrait) {
     margin-right: 3.8rem;
+
+    &--mobile {
+      display: block;
+    }
+
+    &--desktop {
+      display: none;
+    }
   }
 
   img {
@@ -360,6 +376,12 @@
     animation-timing-function: ease-out, ease-out;
     animation-fill-mode: both, both;
 
+    @media (max-width: $tablet) and (orientation: portrait) {
+      opacity: 1;
+      transform: none;
+      animation-name: none;
+    }
+
     .prizes__desc {
       opacity: 0;
       animation-name: fadeIn;
@@ -368,12 +390,20 @@
       animation-timing-function: ease-out;
       animation-fill-mode: both;
 
+      @media (max-width: $tablet) and (orientation: portrait) {
+        animation-delay: 0.5s;
+      }
+
       span {
         animation-name: fadeInLeft;
         animation-duration: 0.4s;
         animation-delay: 4.4s;
         animation-timing-function: ease-out;
         animation-fill-mode: both;
+
+        @media (max-width: $tablet) and (orientation: portrait) {
+          animation-delay: 0.5s;
+        }
       }
     }
   }
@@ -386,6 +416,11 @@
     animation-timing-function: ease-out;
     animation-fill-mode: both;
 
+    @media (max-width: $tablet) and (orientation: portrait) {
+      opacity: 1;
+      animation-name: none;
+    }
+
     .prizes__desc {
       opacity: 0;
       animation-name: fadeIn;
@@ -394,12 +429,20 @@
       animation-timing-function: ease-out;
       animation-fill-mode: both;
 
+      @media (max-width: $tablet) and (orientation: portrait) {
+        animation-delay: 1s;
+      }
+
       span {
         animation-name: fadeInLeft;
         animation-duration: 0.4s;
         animation-delay: 6s;
         animation-timing-function: ease-out;
         animation-fill-mode: both;
+
+        @media (max-width: $tablet) and (orientation: portrait) {
+          animation-delay: 1s;
+        }
       }
     }
   }
@@ -413,13 +456,22 @@
       animation-timing-function: ease-out;
       animation-fill-mode: both;
 
+      @media (max-width: $tablet) and (orientation: portrait) {
+        animation-delay: 1.5s;
+      }
+
       span {
         animation-name: fadeInLeft;
         animation-duration: 0.4s;
         animation-delay: 9.5s;
         animation-timing-function: ease-out;
         animation-fill-mode: both;
+
+        @media (max-width: $tablet) and (orientation: portrait) {
+          animation-delay: 1.5s;
+        }
       }
     }
   }
 }
+
