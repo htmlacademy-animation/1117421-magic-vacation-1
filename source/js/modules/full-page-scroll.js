@@ -2,6 +2,7 @@ import throttle from 'lodash/throttle';
 import {screenNames} from "./utils";
 import {animateText} from "./text-animate";
 import {animatePrizes} from "./prizes-animate";
+import {startGameTimer, resetGameTimer} from "./game-timer";
 
 export default class FullPageScroll {
   constructor() {
@@ -41,6 +42,12 @@ export default class FullPageScroll {
     const back = document.querySelector(`.backing`);
     const currentScreen = document.querySelector(`.screen.active`);
     const isBack = this.isShowBackgroundBlock(this.screenElements[this.activeScreen].id);
+
+    if (this.screenElements[this.activeScreen].id === screenNames.GAME) {
+      startGameTimer();
+    } else {
+      resetGameTimer();
+    }
 
     if (isBack) {
       back.classList.add(`active`);
