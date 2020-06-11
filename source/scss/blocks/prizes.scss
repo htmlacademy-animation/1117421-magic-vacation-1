@@ -117,6 +117,24 @@
   }
 }
 
+.prizes__number {
+  display: none;
+
+  &--animate {
+    display: block;
+    width: 6rem;
+    text-align: right;
+  }
+
+  @media (max-width: $tablet) and (orientation: portrait) {
+    display: block;
+
+    &--animate {
+      display: none;
+    }
+  }
+}
+
 .prizes__item {
   margin-left: 7.5rem;
 
@@ -232,6 +250,10 @@
       @media (max-width: $mobile) and (orientation: landscape) {
         width: 10rem;
       }
+    }
+
+    .prizes__number--animate {
+      width: 18rem;
     }
   }
 }
