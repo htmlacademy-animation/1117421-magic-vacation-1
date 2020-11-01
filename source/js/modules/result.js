@@ -1,3 +1,5 @@
+import {firstResultAnimate} from "./first-result-animate";
+
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
   let results = document.querySelectorAll(`.screen--result`);
@@ -31,6 +33,11 @@ export default () => {
 
         targetSvg.remove();
         targetTitle.appendChild(copySvg);
+
+        const firstResultAnimateDelay = 300;
+        setTimeout(() => {
+          firstResultAnimate(targetEl[0].querySelector(`#resultPic`));
+        }, firstResultAnimateDelay);
       });
     }
 
