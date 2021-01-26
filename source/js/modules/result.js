@@ -1,4 +1,5 @@
 import {firstResultAnimate} from "./first-result-animate";
+import {thirdResultAnimate} from "./third-result-animate";
 
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
@@ -34,10 +35,17 @@ export default () => {
         targetSvg.remove();
         targetTitle.appendChild(copySvg);
 
-        const firstResultAnimateDelay = 300;
-        setTimeout(() => {
-          firstResultAnimate(targetEl[0].querySelector(`#resultPic`));
-        }, firstResultAnimateDelay);
+        const firstResultPic = targetEl[0].querySelector(`#firstResultPic`);
+        const thirdResultPic = targetEl[0].querySelector(`#thirdResultPic`);
+        if (firstResultPic) {
+          const firstResultAnimateDelay = 300;
+          setTimeout(() => {
+            firstResultAnimate(firstResultPic);
+          }, firstResultAnimateDelay);
+        }
+        if (thirdResultPic) {
+          thirdResultAnimate(thirdResultPic);
+        }
       });
     }
 

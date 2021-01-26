@@ -9,57 +9,60 @@ const rotateObject = (ctx, angle, cx, cy) => {
 };
 const windowHeight = window.innerHeight;
 const windowWidth = window.innerWidth;
+const wFactorMin = 0.4;
+const wFactor = Math.max(windowWidth / 1440, wFactorMin);
+const hFactor = windowHeight / 760;
 const sizes = {
   back: {
-    width: 586,
-    height: 324,
-    deltaX: -18,
-    deltaY: -183
+    width: 586 * wFactor,
+    height: 324 * wFactor,
+    deltaX: -18 * wFactor,
+    deltaY: -183 * wFactor
   },
   airplane: {
-    width: 82,
-    height: 79,
-    deltaX: 556,
-    deltaY: -145
+    width: 82 * wFactor,
+    height: 79 * wFactor,
+    deltaX: 556 * wFactor,
+    deltaY: -145 * wFactor
   },
   tree: {
-    width: 50,
-    height: 159,
-    deltaX: 267,
-    deltaY: -119
+    width: 50 * wFactor,
+    height: 159 * wFactor,
+    deltaX: 267 * wFactor,
+    deltaY: -119 * wFactor
   },
   treeSecond: {
-    width: 38,
-    height: 101,
-    deltaX: 313,
-    deltaY: -61
+    width: 38 * wFactor,
+    height: 101 * wFactor,
+    deltaX: 313 * wFactor,
+    deltaY: -61 * wFactor
   },
   ice: {
-    width: 408,
-    height: 167
+    width: 408 * wFactor,
+    height: 167 * wFactor
   },
   seal: {
-    width: 271,
-    height: 212,
-    deltaX: 86,
-    deltaY: -106
+    width: 271 * wFactor,
+    height: 212 * wFactor,
+    deltaX: 86 * wFactor,
+    deltaY: -106 * wFactor
   },
   snowflakeLeft: {
-    width: 119,
-    height: 141,
-    deltaX: -103,
-    deltaY: -101
+    width: 119 * wFactor,
+    height: 141 * wFactor,
+    deltaX: -103 * wFactor,
+    deltaY: -101 * wFactor
   },
   snowflakeRight: {
-    width: 94,
-    height: 111,
-    deltaX: 387,
-    deltaY: -10
+    width: 94 * wFactor,
+    height: 111 * wFactor,
+    deltaX: 387 * wFactor,
+    deltaY: -10 * wFactor
   },
 };
 const startPoint = {
   x: Math.round((windowWidth - sizes.ice.width) / 2),
-  y: windowHeight - 330
+  y: windowHeight - 300 * hFactor
 };
 const animations = [];
 const bezierFunc = bezierEasing(0.33, 0, 0.67, 1);
@@ -77,8 +80,8 @@ const backScaleAnimationTick = (from, to) => (progress) => {
 };
 
 // параметры анимации для самолета
-const airplaneTranslateYOffsets = [-63, 0];
-const airplaneTranslateXOffsets = [-397, 0];
+const airplaneTranslateYOffsets = [-63 * wFactor, 0];
+const airplaneTranslateXOffsets = [-397 * wFactor, 0];
 const airplaneRotateOffsets = [63, 74, 63, 0];
 let airplaneTranslateY = airplaneTranslateYOffsets[0];
 let airplaneTranslateX = airplaneTranslateXOffsets[0];
@@ -101,8 +104,8 @@ const airplaneRotateAnimates = [
 // параметры анимации для дерева
 let treeOpacity = 0;
 let treeSecondOpacity = 1;
-let treeTranslateY = 200;
-let treeSecondTranslateY = 120;
+let treeTranslateY = 200 * wFactor;
+let treeSecondTranslateY = 120 * wFactor;
 let treeOpacityTo = 1;
 const treeOpacityAnimationTick = (from, to) => (progress) => {
   treeOpacity = from + progress * Math.sign(to - from) * Math.abs(to - from);
@@ -118,7 +121,7 @@ const treeSecondTranslateYAnimationTick = (from, to) => (progress) => {
 };
 
 // параметры анимации для снежинки
-const snowflakeTranslateYOffset = 10;
+const snowflakeTranslateYOffset = 10 * wFactor;
 const snowflakeLeftOpacityDelay = 150;
 const snowflakeRightOpacityDelay = 200;
 let snowflakeLeftOpacity = 0;
@@ -155,7 +158,7 @@ const snowflakeRightTranslateYAnimates = [
 ];
 
 // параметры анимации для моржа на льдине
-const sealTranslateYOffsets = [560, -26, 21, -12, 11, -7, 0];
+const sealTranslateYOffsets = [560 * wFactor, -26, 21, -12, 11, -7, 0];
 const sealRotateOffsets = [20, -4, 5, -4, 1, 0];
 let sealTranslateY = sealTranslateYOffsets[0];
 let sealRotateAngle = sealRotateOffsets[0];
