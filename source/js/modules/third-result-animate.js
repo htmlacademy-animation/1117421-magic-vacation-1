@@ -1,6 +1,7 @@
 import {runSerial, runSerialLoop} from "../helpers/promise";
 import animate from "../helpers/animate";
-import {bezierEasing} from "../helpers/cubicBezier";
+import {bezierEasing} from "../helpers/cubic-bezier";
+import AnimateBuilder from "../helpers/animate-builder";
 
 const rotateObject = (ctx, angle, cx, cy) => {
   ctx.translate(cx, cy);
@@ -79,225 +80,136 @@ const bezierCrocodileFunc = bezierEasing(0.15, 0, 0.82, 1);
 const delayFromKey = 100;
 
 // параметры анимации для замочной скважины
-let keyOpacity = 0;
-let keyOpacityTo = 1;
-let keyScale = 0.8;
-let keyScaleTo = 1;
-const keyOpacityAnimationTick = (from, to) => (progress) => {
-  keyOpacity = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const keyScaleAnimationTick = (from, to) => (progress) => {
-  keyScale = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const keyAnimateBuilder = new AnimateBuilder({
+  opacityOffsets: [0, 1],
+  scaleXOffsets: [0.8, 1],
+  scaleYOffsets: [0.8, 1]}
+);
 
 // параметры анимации для слезы
-const dropTranslateYOffsets = [5 * wFactor, 61 * wFactor];
-const dropScaleXOffsets = [0, 0.5, 1, 0.5];
-const dropScaleYOffsets = [0, 0.4, 1, 0.5];
-const dropOpacityOffsets = [1, 0];
+const dropAnimateBuilder = new AnimateBuilder({
+  opacityOffsets: [1, 0],
+  scaleXOffsets: [0, 0.5, 1, 0.5],
+  scaleYOffsets: [0, 0.4, 1, 0.5],
+  translateYOffsets: [5 * wFactor, 61 * wFactor]}
+);
 const dropDelay = 1200;
-let dropOpacity = dropOpacityOffsets[0];
-let dropTranslateY = dropTranslateYOffsets[0];
-let dropScaleX = dropScaleXOffsets[0];
-let dropScaleY = dropScaleYOffsets[0];
-const dropOpacityAnimationTick = (from, to) => (progress) => {
-  dropOpacity = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const dropTranslateYAnimationTick = (from, to) => (progress) => {
-  dropTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const dropScaleXAnimationTick = (from, to) => (progress) => {
-  dropScaleX = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const dropScaleYAnimationTick = (from, to) => (progress) => {
-  dropScaleY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
 const dropTranslateYAnimates = [
-  () => animate.easing(dropTranslateYAnimationTick(dropTranslateYOffsets[0], 0), 330, bezierFunc),
-  () => animate.easing(dropTranslateYAnimationTick(0, dropTranslateYOffsets[0]), 253, bezierFunc),
-  () => animate.easing(dropTranslateYAnimationTick(dropTranslateYOffsets[0], dropTranslateYOffsets[0]), 127, bezierFunc),
-  () => animate.easing(dropTranslateYAnimationTick(dropTranslateYOffsets[0], dropTranslateYOffsets[1]), 507, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.translateYAnimationTick(dropAnimateBuilder.translateYOffsets[0], 0), 330, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.translateYAnimationTick(0, dropAnimateBuilder.translateYOffsets[0]), 253, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.translateYAnimationTick(dropAnimateBuilder.translateYOffsets[0], dropAnimateBuilder.translateYOffsets[0]), 127, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.translateYAnimationTick(dropAnimateBuilder.translateYOffsets[0], dropAnimateBuilder.translateYOffsets[1]), 507, bezierFunc),
 ];
 const dropScaleXAnimates = [
-  () => animate.easing(dropScaleXAnimationTick(dropScaleXOffsets[0], dropScaleXOffsets[1]), 330, bezierFunc),
-  () => animate.easing(dropScaleXAnimationTick(dropScaleXOffsets[1], dropScaleXOffsets[2]), 253, bezierFunc),
-  () => animate.easing(dropScaleXAnimationTick(dropScaleXOffsets[2], dropScaleXOffsets[2]), 431, bezierFunc),
-  () => animate.easing(dropScaleXAnimationTick(dropScaleXOffsets[2], dropScaleXOffsets[3]), 203, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.scaleXAnimationTick(dropAnimateBuilder.scaleXOffsets[0], dropAnimateBuilder.scaleXOffsets[1]), 330, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.scaleXAnimationTick(dropAnimateBuilder.scaleXOffsets[1], dropAnimateBuilder.scaleXOffsets[2]), 253, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.scaleXAnimationTick(dropAnimateBuilder.scaleXOffsets[2], dropAnimateBuilder.scaleXOffsets[2]), 431, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.scaleXAnimationTick(dropAnimateBuilder.scaleXOffsets[2], dropAnimateBuilder.scaleXOffsets[3]), 203, bezierFunc),
 ];
 const dropScaleYAnimates = [
-  () => animate.easing(dropScaleYAnimationTick(dropScaleYOffsets[0], dropScaleYOffsets[1]), 330, bezierFunc),
-  () => animate.easing(dropScaleYAnimationTick(dropScaleYOffsets[1], dropScaleYOffsets[2]), 253, bezierFunc),
-  () => animate.easing(dropScaleYAnimationTick(dropScaleYOffsets[2], dropScaleYOffsets[2]), 431, bezierFunc),
-  () => animate.easing(dropScaleYAnimationTick(dropScaleYOffsets[2], dropScaleYOffsets[3]), 203, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.scaleYAnimationTick(dropAnimateBuilder.scaleYOffsets[0], dropAnimateBuilder.scaleYOffsets[1]), 330, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.scaleYAnimationTick(dropAnimateBuilder.scaleYOffsets[1], dropAnimateBuilder.scaleYOffsets[2]), 253, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.scaleYAnimationTick(dropAnimateBuilder.scaleYOffsets[2], dropAnimateBuilder.scaleYOffsets[2]), 431, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.scaleYAnimationTick(dropAnimateBuilder.scaleYOffsets[2], dropAnimateBuilder.scaleYOffsets[3]), 203, bezierFunc),
 ];
 const dropOpacityAnimates = [
-  () => animate.easing(dropOpacityAnimationTick(dropOpacityOffsets[0], dropOpacityOffsets[0]), 330, bezierFunc),
-  () => animate.easing(dropOpacityAnimationTick(dropOpacityOffsets[0], dropOpacityOffsets[0]), 253, bezierFunc),
-  () => animate.easing(dropOpacityAnimationTick(dropOpacityOffsets[0], dropOpacityOffsets[0]), 431, bezierFunc),
-  () => animate.easing(dropOpacityAnimationTick(dropOpacityOffsets[0], dropOpacityOffsets[1]), 203, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.opacityAnimationTick(dropAnimateBuilder.opacityOffsets[0], dropAnimateBuilder.opacityOffsets[0]), 330, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.opacityAnimationTick(dropAnimateBuilder.opacityOffsets[0], dropAnimateBuilder.opacityOffsets[0]), 253, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.opacityAnimationTick(dropAnimateBuilder.opacityOffsets[0], dropAnimateBuilder.opacityOffsets[0]), 431, bezierFunc),
+  () => animate.easing(dropAnimateBuilder.opacityAnimationTick(dropAnimateBuilder.opacityOffsets[0], dropAnimateBuilder.opacityOffsets[1]), 203, bezierFunc),
 ];
 
 // параметры анимации для листа
-const leafTranslateXOffsets = [-300 * wFactor, 0, 0];
-const leafTranslateYOffsets = [228 * hFactor, 0, 678 * hFactor];
-let leafScale = 0;
-let leafScaleTo = 1;
-let leafRotate = -40;
-let leafRotateTo = 0;
-let leafTranslateX = leafTranslateXOffsets[0];
-let leafTranslateY = leafTranslateYOffsets[0];
-const leafScaleAnimationTick = (from, to) => (progress) => {
-  leafScale = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const leafRotateAnimationTick = (from, to) => (progress) => {
-  leafRotate = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const leafTranslateYAnimationTick = (from, to) => (progress) => {
-  leafTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const leafTranslateXAnimationTick = (from, to) => (progress) => {
-  leafTranslateX = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const leafAnimateBuilder = new AnimateBuilder({
+  rotateOffsets: [-40, 0],
+  scaleXOffsets: [0, 1],
+  scaleYOffsets: [0, 1],
+  translateXOffsets: [(-300 - (sizes.key.width / 2 - sizes.leaf.width / 2)) * wFactor, 0, 0],
+  translateYOffsets: [(228 - (sizes.key.height / 2 - sizes.leaf.height / 2)) * hFactor, 0, 678 * hFactor]}
+);
 const leafTranslateYAnimates = [
-  () => animate.easing(leafTranslateYAnimationTick(leafTranslateYOffsets[0], leafTranslateYOffsets[1]), 533, bezierFlyFunc),
-  () => animate.easing(leafTranslateYAnimationTick(leafTranslateYOffsets[1], leafTranslateYOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(leafAnimateBuilder.translateYAnimationTick(leafAnimateBuilder.translateYOffsets[0], leafAnimateBuilder.translateYOffsets[1]), 533, bezierFlyFunc),
+  () => animate.easing(leafAnimateBuilder.translateYAnimationTick(leafAnimateBuilder.translateYOffsets[1], leafAnimateBuilder.translateYOffsets[2]), 583, bezierFlyAddFunc),
 ];
 const leafTranslateXAnimates = [
-  () => animate.easing(leafTranslateXAnimationTick(leafTranslateXOffsets[0], leafTranslateXOffsets[1]), 533, bezierFlyFunc),
-  () => animate.easing(leafTranslateXAnimationTick(leafTranslateXOffsets[1], leafTranslateXOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(leafAnimateBuilder.translateXAnimationTick(leafAnimateBuilder.translateXOffsets[0], leafAnimateBuilder.translateXOffsets[1]), 533, bezierFlyFunc),
+  () => animate.easing(leafAnimateBuilder.translateXAnimationTick(leafAnimateBuilder.translateXOffsets[1], leafAnimateBuilder.translateXOffsets[2]), 583, bezierFlyAddFunc),
 ];
 
 // параметры анимации для сатурна
-const saturnTranslateXOffsets = [-336 * wFactor, 0, 0];
-const saturnTranslateYOffsets = [-182 * hFactor, 0, 414 * hFactor];
-let saturnScale = 0;
-let saturnScaleTo = 1;
-let saturnRotate = 50;
-let saturnRotateTo = 0;
-let saturnTranslateX = saturnTranslateXOffsets[0];
-let saturnTranslateY = saturnTranslateYOffsets[0];
-const saturnScaleAnimationTick = (from, to) => (progress) => {
-  saturnScale = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const saturnRotateAnimationTick = (from, to) => (progress) => {
-  saturnRotate = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const saturnTranslateYAnimationTick = (from, to) => (progress) => {
-  saturnTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const saturnTranslateXAnimationTick = (from, to) => (progress) => {
-  saturnTranslateX = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const saturnAnimateBuilder = new AnimateBuilder({
+  rotateOffsets: [50, 0],
+  scaleXOffsets: [0, 1],
+  scaleYOffsets: [0, 1],
+  translateXOffsets: [(-336 + (sizes.key.width / 2 - sizes.saturn.width / 2)) * wFactor, 0, 0],
+  translateYOffsets: [(-182 + (sizes.key.height / 2 - sizes.saturn.height / 2)) * hFactor, 0, 414 * hFactor]}
+);
 const saturnTranslateYAnimates = [
-  () => animate.easing(saturnTranslateYAnimationTick(saturnTranslateYOffsets[0], saturnTranslateYOffsets[1]), 617, bezierFlyFunc),
-  () => animate.easing(saturnTranslateYAnimationTick(saturnTranslateYOffsets[1], saturnTranslateYOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(saturnAnimateBuilder.translateYAnimationTick(saturnAnimateBuilder.translateYOffsets[0], saturnAnimateBuilder.translateYOffsets[1]), 617, bezierFlyFunc),
+  () => animate.easing(saturnAnimateBuilder.translateYAnimationTick(saturnAnimateBuilder.translateYOffsets[1], saturnAnimateBuilder.translateYOffsets[2]), 583, bezierFlyAddFunc),
 ];
 const saturnTranslateXAnimates = [
-  () => animate.easing(saturnTranslateXAnimationTick(saturnTranslateXOffsets[0], saturnTranslateXOffsets[1]), 617, bezierFlyFunc),
-  () => animate.easing(saturnTranslateXAnimationTick(saturnTranslateXOffsets[1], saturnTranslateXOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(saturnAnimateBuilder.translateXAnimationTick(saturnAnimateBuilder.translateXOffsets[0], saturnAnimateBuilder.translateXOffsets[1]), 617, bezierFlyFunc),
+  () => animate.easing(saturnAnimateBuilder.translateXAnimationTick(saturnAnimateBuilder.translateXOffsets[1], saturnAnimateBuilder.translateXOffsets[2]), 583, bezierFlyAddFunc),
 ];
 
 // параметры анимации для фламинго
-const flamingoTranslateXOffsets = [206 * wFactor, 0, 0];
-const flamingoTranslateYOffsets = [-44 * hFactor, 0, 590 * hFactor];
-let flamingoScale = 0;
-let flamingoScaleTo = 1;
-let flamingoRotate = 60;
-let flamingoRotateTo = 0;
-let flamingoTranslateX = flamingoTranslateXOffsets[0];
-let flamingoTranslateY = flamingoTranslateYOffsets[0];
-const flamingoScaleAnimationTick = (from, to) => (progress) => {
-  flamingoScale = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const flamingoRotateAnimationTick = (from, to) => (progress) => {
-  flamingoRotate = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const flamingoTranslateYAnimationTick = (from, to) => (progress) => {
-  flamingoTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const flamingoTranslateXAnimationTick = (from, to) => (progress) => {
-  flamingoTranslateX = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const flamingoAnimateBuilder = new AnimateBuilder({
+  rotateOffsets: [60, 0],
+  scaleXOffsets: [0, 1],
+  scaleYOffsets: [0, 1],
+  translateXOffsets: [(206 - (sizes.key.width / 2 - sizes.flamingo.width / 2)) * wFactor, 0, 0],
+  translateYOffsets: [(-44 + (sizes.key.height / 2 - sizes.flamingo.height / 2)) * hFactor, 0, 590 * hFactor]}
+);
 const flamingoTranslateYAnimates = [
-  () => animate.easing(flamingoTranslateYAnimationTick(flamingoTranslateYOffsets[0], flamingoTranslateYOffsets[1]), 617, bezierFlyFunc),
-  () => animate.easing(flamingoTranslateYAnimationTick(flamingoTranslateYOffsets[1], flamingoTranslateYOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(flamingoAnimateBuilder.translateYAnimationTick(flamingoAnimateBuilder.translateYOffsets[0], flamingoAnimateBuilder.translateYOffsets[1]), 617, bezierFlyFunc),
+  () => animate.easing(flamingoAnimateBuilder.translateYAnimationTick(flamingoAnimateBuilder.translateYOffsets[1], flamingoAnimateBuilder.translateYOffsets[2]), 583, bezierFlyAddFunc),
 ];
 const flamingoTranslateXAnimates = [
-  () => animate.easing(flamingoTranslateXAnimationTick(flamingoTranslateXOffsets[0], flamingoTranslateXOffsets[1]), 617, bezierFlyFunc),
-  () => animate.easing(flamingoTranslateXAnimationTick(flamingoTranslateXOffsets[1], flamingoTranslateXOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(flamingoAnimateBuilder.translateXAnimationTick(flamingoAnimateBuilder.translateXOffsets[0], flamingoAnimateBuilder.translateXOffsets[1]), 617, bezierFlyFunc),
+  () => animate.easing(flamingoAnimateBuilder.translateXAnimationTick(flamingoAnimateBuilder.translateXOffsets[1], flamingoAnimateBuilder.translateXOffsets[2]), 583, bezierFlyAddFunc),
 ];
 
 // параметры анимации для арбуза
-const watermelonTranslateXOffsets = [318 * wFactor, 0, 0];
-const watermelonTranslateYOffsets = [-140 * hFactor, 0, 428 * hFactor];
-let watermelonScale = 0;
-let watermelonScaleTo = 1;
-let watermelonRotate = 60;
-let watermelonRotateTo = 0;
-let watermelonTranslateX = watermelonTranslateXOffsets[0];
-let watermelonTranslateY = watermelonTranslateYOffsets[0];
-const watermelonScaleAnimationTick = (from, to) => (progress) => {
-  watermelonScale = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const watermelonRotateAnimationTick = (from, to) => (progress) => {
-  watermelonRotate = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const watermelonTranslateYAnimationTick = (from, to) => (progress) => {
-  watermelonTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const watermelonTranslateXAnimationTick = (from, to) => (progress) => {
-  watermelonTranslateX = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const watermelonAnimateBuilder = new AnimateBuilder({
+  rotateOffsets: [60, 0],
+  scaleXOffsets: [0, 1],
+  scaleYOffsets: [0, 1],
+  translateXOffsets: [(318 - (sizes.key.width / 2 - sizes.watermelon.width / 2)) * wFactor, 0, 0],
+  translateYOffsets: [(-140 + (sizes.key.height / 2 - sizes.watermelon.height / 2)) * hFactor, 0, 428 * hFactor]}
+);
 const watermelonTranslateYAnimates = [
-  () => animate.easing(watermelonTranslateYAnimationTick(watermelonTranslateYOffsets[0], watermelonTranslateYOffsets[1]), 533, bezierFlyFunc),
-  () => animate.easing(watermelonTranslateYAnimationTick(watermelonTranslateYOffsets[1], watermelonTranslateYOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(watermelonAnimateBuilder.translateYAnimationTick(watermelonAnimateBuilder.translateYOffsets[0], watermelonAnimateBuilder.translateYOffsets[1]), 533, bezierFlyFunc),
+  () => animate.easing(watermelonAnimateBuilder.translateYAnimationTick(watermelonAnimateBuilder.translateYOffsets[1], watermelonAnimateBuilder.translateYOffsets[2]), 583, bezierFlyAddFunc),
 ];
 const watermelonTranslateXAnimates = [
-  () => animate.easing(watermelonTranslateXAnimationTick(watermelonTranslateXOffsets[0], watermelonTranslateXOffsets[1]), 533, bezierFlyFunc),
-  () => animate.easing(watermelonTranslateXAnimationTick(watermelonTranslateXOffsets[1], watermelonTranslateXOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(watermelonAnimateBuilder.translateXAnimationTick(watermelonAnimateBuilder.translateXOffsets[0], watermelonAnimateBuilder.translateXOffsets[1]), 533, bezierFlyFunc),
+  () => animate.easing(watermelonAnimateBuilder.translateXAnimationTick(watermelonAnimateBuilder.translateXOffsets[1], watermelonAnimateBuilder.translateXOffsets[2]), 583, bezierFlyAddFunc),
 ];
 
 // параметры анимации для снежинки
-const snowflakeTranslateXOffsets = [-184 * wFactor, 0, 0];
-const snowflakeTranslateYOffsets = [-30 * hFactor, 0, 532 * hFactor];
-let snowflakeScale = 0;
-let snowflakeScaleTo = 1;
-let snowflakeRotate = -60;
-let snowflakeRotateTo = 0;
-let snowflakeTranslateX = snowflakeTranslateXOffsets[0];
-let snowflakeTranslateY = snowflakeTranslateYOffsets[0];
-const snowflakeScaleAnimationTick = (from, to) => (progress) => {
-  snowflakeScale = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const snowflakeRotateAnimationTick = (from, to) => (progress) => {
-  snowflakeRotate = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const snowflakeTranslateYAnimationTick = (from, to) => (progress) => {
-  snowflakeTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const snowflakeTranslateXAnimationTick = (from, to) => (progress) => {
-  snowflakeTranslateX = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const snowflakeAnimateBuilder = new AnimateBuilder({
+  rotateOffsets: [-60, 0],
+  scaleXOffsets: [0, 1],
+  scaleYOffsets: [0, 1],
+  translateXOffsets: [(-184 + (sizes.key.width / 2 + sizes.snowflake.width / 2)) * wFactor, 0, 0],
+  translateYOffsets: [(100 - (sizes.key.height / 2 - sizes.snowflake.height / 2)) * hFactor, 0, 532 * hFactor]}
+);
 const snowflakeTranslateYAnimates = [
-  () => animate.easing(snowflakeTranslateYAnimationTick(snowflakeTranslateYOffsets[0], snowflakeTranslateYOffsets[1]), 683, bezierFlyFunc),
-  () => animate.easing(snowflakeTranslateYAnimationTick(snowflakeTranslateYOffsets[1], snowflakeTranslateYOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(snowflakeAnimateBuilder.translateYAnimationTick(snowflakeAnimateBuilder.translateYOffsets[0], snowflakeAnimateBuilder.translateYOffsets[1]), 683, bezierFlyFunc),
+  () => animate.easing(snowflakeAnimateBuilder.translateYAnimationTick(snowflakeAnimateBuilder.translateYOffsets[1], snowflakeAnimateBuilder.translateYOffsets[2]), 583, bezierFlyAddFunc),
 ];
 const snowflakeTranslateXAnimates = [
-  () => animate.easing(snowflakeTranslateXAnimationTick(snowflakeTranslateXOffsets[0], snowflakeTranslateXOffsets[1]), 683, bezierFlyFunc),
-  () => animate.easing(snowflakeTranslateXAnimationTick(snowflakeTranslateXOffsets[1], snowflakeTranslateXOffsets[2]), 583, bezierFlyAddFunc),
+  () => animate.easing(snowflakeAnimateBuilder.translateXAnimationTick(snowflakeAnimateBuilder.translateXOffsets[0], snowflakeAnimateBuilder.translateXOffsets[1]), 683, bezierFlyFunc),
+  () => animate.easing(snowflakeAnimateBuilder.translateXAnimationTick(snowflakeAnimateBuilder.translateXOffsets[1], snowflakeAnimateBuilder.translateXOffsets[2]), 583, bezierFlyAddFunc),
 ];
 
 // параметры анимации для крокодила
+const crocodileAnimateBuilder = new AnimateBuilder({
+  translateXOffsets: [334 * wFactor, 0],
+  translateYOffsets: [-104 * hFactor, 0]}
+);
 const crocodileDelay = 617;
-let crocodileTranslateY = -104 * wFactor;
-let crocodileTranslateX = 334 * wFactor;
-const crocodileTranslateYAnimationTick = (from, to) => (progress) => {
-  crocodileTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const crocodileTranslateXAnimationTick = (from, to) => (progress) => {
-  crocodileTranslateX = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-
 
 const drawResultCanvas = (resultCanvas) => {
   const resultContext = resultCanvas.getContext(`2d`);
@@ -306,53 +218,156 @@ const drawResultCanvas = (resultCanvas) => {
   resultContext.clearRect(0, 0, windowWidth, windowHeight);
   resultContext.save();
 
-  scaleObject(resultContext, keyScale, keyScale, startPoint.x + sizes.key.width / 2, startPoint.y + sizes.key.height / 2);
-  resultContext.globalAlpha = keyOpacity;
-  resultContext.drawImage(keyImg, startPoint.x, startPoint.y, sizes.key.width, sizes.key.height * keyScale);
+  // рисуем скважину
+  scaleObject(
+      resultContext,
+      keyAnimateBuilder.scaleX,
+      keyAnimateBuilder.scaleY,
+      startPoint.x + sizes.key.width / 2,
+      startPoint.y + sizes.key.height / 2);
+  resultContext.globalAlpha = keyAnimateBuilder.opacity;
+  resultContext.drawImage(keyImg, startPoint.x, startPoint.y, sizes.key.width, sizes.key.height);
   resultContext.restore();
   resultContext.save();
 
-  resultContext.drawImage(crocodileImg, startPoint.x + sizes.crocodile.deltaX + crocodileTranslateX, startPoint.y + sizes.crocodile.deltaY + crocodileTranslateY, sizes.crocodile.width, sizes.crocodile.height);
+  // рисуем крокодила
+  resultContext.drawImage(
+      crocodileImg,
+      startPoint.x + sizes.crocodile.deltaX + crocodileAnimateBuilder.translateX,
+      startPoint.y + sizes.crocodile.deltaY + crocodileAnimateBuilder.translateY,
+      sizes.crocodile.width,
+      sizes.crocodile.height);
   resultContext.beginPath();
   resultContext.moveTo(startPoint.x + sizes.key.width, startPoint.y + sizes.key.height);
   resultContext.lineTo(windowWidth, startPoint.y + sizes.key.height);
-  resultContext.lineTo(windowWidth, startPoint.y);
+  resultContext.lineTo(windowWidth, 0);
+  resultContext.lineTo(startPoint.x + sizes.key.width / 2, 0);
   resultContext.lineTo(startPoint.x + sizes.key.width / 2, startPoint.y);
-  resultContext.arc(startPoint.x + 84 * wFactor, startPoint.y + 84 * wFactor, 84 * wFactor, Math.PI * 1.5, Math.PI * 0.3);
+  resultContext.arc(startPoint.x + 84 * wFactor, startPoint.y + 84 * wFactor, 84 * wFactor, Math.PI * 1.5, Math.PI * 0.26);
   resultContext.closePath();
   resultContext.fillStyle = `#5f458c`;
   resultContext.fill();
   resultContext.restore();
   resultContext.save();
 
-  scaleObject(resultContext, dropScaleX, dropScaleY, startPoint.x + sizes.drop.deltaX + sizes.drop.width / 2, startPoint.y + sizes.drop.deltaY + dropTranslateY);
-  resultContext.globalAlpha = dropOpacity;
-  resultContext.drawImage(dropImg, startPoint.x + sizes.drop.deltaX, startPoint.y + sizes.drop.deltaY + dropTranslateY, sizes.drop.width, sizes.drop.height);
+  // рисуем слезу
+  scaleObject(
+      resultContext,
+      dropAnimateBuilder.scaleX,
+      dropAnimateBuilder.scaleY,
+      startPoint.x + sizes.drop.deltaX + sizes.drop.width / 2,
+      startPoint.y + sizes.drop.deltaY + dropAnimateBuilder.translateY);
+  resultContext.globalAlpha = dropAnimateBuilder.opacity;
+  resultContext.drawImage(
+      dropImg,
+      startPoint.x + sizes.drop.deltaX,
+      startPoint.y + sizes.drop.deltaY + dropAnimateBuilder.translateY,
+      sizes.drop.width, sizes.drop.height);
   resultContext.restore();
   resultContext.save();
 
-  rotateObject(resultContext, leafRotate, startPoint.x, startPoint.y);
-  resultContext.drawImage(leafImg, startPoint.x + sizes.leaf.deltaX + leafTranslateX, startPoint.y + sizes.leaf.deltaY + leafTranslateY, sizes.leaf.width * leafScale, sizes.leaf.height * leafScale);
+  // рисуем лист
+  rotateObject(
+      resultContext,
+      leafAnimateBuilder.rotate,
+      startPoint.x + sizes.key.width / 2,
+      startPoint.y + sizes.key.height / 2);
+  scaleObject(
+      resultContext,
+      leafAnimateBuilder.scaleX,
+      leafAnimateBuilder.scaleY,
+      startPoint.x + sizes.leaf.deltaX + sizes.leaf.width / 2 + leafAnimateBuilder.translateX,
+      startPoint.y + sizes.leaf.deltaY + sizes.leaf.height / 2 + leafAnimateBuilder.translateY);
+  resultContext.drawImage(
+      leafImg,
+      startPoint.x + sizes.leaf.deltaX + leafAnimateBuilder.translateX,
+      startPoint.y + sizes.leaf.deltaY + leafAnimateBuilder.translateY,
+      sizes.leaf.width,
+      sizes.leaf.height);
   resultContext.restore();
   resultContext.save();
 
-  rotateObject(resultContext, saturnRotate, startPoint.x, startPoint.y);
-  resultContext.drawImage(saturnImg, startPoint.x + sizes.saturn.deltaX + saturnTranslateX, startPoint.y + sizes.saturn.deltaY + saturnTranslateY, sizes.saturn.width * saturnScale, sizes.saturn.height * saturnScale);
+  // рисуем сатурн
+  rotateObject(
+      resultContext,
+      saturnAnimateBuilder.rotate,
+      startPoint.x + sizes.key.width / 2,
+      startPoint.y + sizes.key.height / 2);
+  scaleObject(
+      resultContext,
+      saturnAnimateBuilder.scaleX,
+      saturnAnimateBuilder.scaleY,
+      startPoint.x + sizes.saturn.deltaX + sizes.saturn.width / 2 + saturnAnimateBuilder.translateX,
+      startPoint.y + sizes.saturn.deltaY + sizes.saturn.height / 2 + saturnAnimateBuilder.translateY);
+  resultContext.drawImage(
+      saturnImg,
+      startPoint.x + sizes.saturn.deltaX + saturnAnimateBuilder.translateX,
+      startPoint.y + sizes.saturn.deltaY + saturnAnimateBuilder.translateY,
+      sizes.saturn.width,
+      sizes.saturn.height);
   resultContext.restore();
   resultContext.save();
 
-  rotateObject(resultContext, flamingoRotate, startPoint.x, startPoint.y);
-  resultContext.drawImage(flamingoImg, startPoint.x + sizes.flamingo.deltaX + flamingoTranslateX, startPoint.y + sizes.flamingo.deltaY + flamingoTranslateY, sizes.flamingo.width * flamingoScale, sizes.flamingo.height * flamingoScale);
+  // рисуем фламинго
+  rotateObject(
+      resultContext,
+      flamingoAnimateBuilder.rotate,
+      startPoint.x + sizes.key.width / 2,
+      startPoint.y + sizes.key.height / 2);
+  scaleObject(
+      resultContext,
+      flamingoAnimateBuilder.scaleX,
+      flamingoAnimateBuilder.scaleY,
+      startPoint.x + sizes.flamingo.deltaX + sizes.flamingo.width / 2 + flamingoAnimateBuilder.translateX,
+      startPoint.y + sizes.flamingo.deltaY + sizes.flamingo.height / 2 + flamingoAnimateBuilder.translateY);
+  resultContext.drawImage(
+      flamingoImg,
+      startPoint.x + sizes.flamingo.deltaX + flamingoAnimateBuilder.translateX,
+      startPoint.y + sizes.flamingo.deltaY + flamingoAnimateBuilder.translateY,
+      sizes.flamingo.width,
+      sizes.flamingo.height);
   resultContext.restore();
   resultContext.save();
 
-  rotateObject(resultContext, watermelonRotate, startPoint.x, startPoint.y);
-  resultContext.drawImage(watermelonImg, startPoint.x + sizes.watermelon.deltaX + watermelonTranslateX, startPoint.y + sizes.watermelon.deltaY + watermelonTranslateY, sizes.watermelon.width * watermelonScale, sizes.watermelon.height * watermelonScale);
+  // рисуем арбуз
+  rotateObject(
+      resultContext,
+      watermelonAnimateBuilder.rotate,
+      startPoint.x + sizes.key.width / 2,
+      startPoint.y + sizes.key.height / 2);
+  scaleObject(
+      resultContext,
+      watermelonAnimateBuilder.scaleX,
+      watermelonAnimateBuilder.scaleY,
+      startPoint.x + sizes.watermelon.deltaX + sizes.watermelon.width / 2 + watermelonAnimateBuilder.translateX,
+      startPoint.y + sizes.watermelon.deltaY + sizes.watermelon.height / 2 + watermelonAnimateBuilder.translateY);
+  resultContext.drawImage(
+      watermelonImg,
+      startPoint.x + sizes.watermelon.deltaX + watermelonAnimateBuilder.translateX,
+      startPoint.y + sizes.watermelon.deltaY + watermelonAnimateBuilder.translateY,
+      sizes.watermelon.width,
+      sizes.watermelon.height);
   resultContext.restore();
   resultContext.save();
 
-  rotateObject(resultContext, snowflakeRotate, startPoint.x, startPoint.y);
-  resultContext.drawImage(snowflakeImg, startPoint.x + sizes.snowflake.deltaX + snowflakeTranslateX, startPoint.y + sizes.snowflake.deltaY + snowflakeTranslateY, sizes.snowflake.width * snowflakeScale, sizes.snowflake.height * snowflakeScale);
+  // рисуем снежинку
+  rotateObject(
+      resultContext,
+      snowflakeAnimateBuilder.rotate,
+      startPoint.x + sizes.key.width / 2,
+      startPoint.y + sizes.key.height / 2);
+  scaleObject(
+      resultContext,
+      snowflakeAnimateBuilder.scaleX,
+      snowflakeAnimateBuilder.scaleY,
+      startPoint.x + sizes.snowflake.deltaX + sizes.snowflake.width / 2 + snowflakeAnimateBuilder.translateX,
+      startPoint.y + sizes.snowflake.deltaY + sizes.snowflake.height / 2 + snowflakeAnimateBuilder.translateY);
+  resultContext.drawImage(
+      snowflakeImg,
+      startPoint.x + sizes.snowflake.deltaX + snowflakeAnimateBuilder.translateX,
+      startPoint.y + sizes.snowflake.deltaY + snowflakeAnimateBuilder.translateY,
+      sizes.snowflake.width,
+      sizes.snowflake.height);
   resultContext.restore();
   resultContext.save();
 };
@@ -380,8 +395,9 @@ const thirdResultAnimate = (resultCanvas) => {
   const globalKeyAnimationTick = (globalProgress) => {
     if (globalProgress >= 0 && animations.indexOf(`key`) === -1) {
       animations.push(`key`);
-      animate.easing(keyOpacityAnimationTick(keyOpacity, keyOpacityTo), 183, bezierFunc);
-      animate.easing(keyScaleAnimationTick(keyScale, keyScaleTo), 183, bezierFunc);
+      animate.easing(keyAnimateBuilder.opacityAnimationTick(keyAnimateBuilder.opacity, keyAnimateBuilder.opacityOffsets[1]), 183, bezierFunc);
+      animate.easing(keyAnimateBuilder.scaleXAnimationTick(keyAnimateBuilder.scaleX, keyAnimateBuilder.scaleXOffsets[1]), 183, bezierFunc);
+      animate.easing(keyAnimateBuilder.scaleYAnimationTick(keyAnimateBuilder.scaleY, keyAnimateBuilder.scaleYOffsets[1]), 183, bezierFunc);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -391,8 +407,9 @@ const thirdResultAnimate = (resultCanvas) => {
       animations.push(`leaf`);
       runSerial(leafTranslateXAnimates);
       runSerial(leafTranslateYAnimates);
-      animate.easing(leafScaleAnimationTick(leafScale, leafScaleTo), 533, bezierFlyFunc);
-      animate.easing(leafRotateAnimationTick(leafRotate, leafRotateTo), 533, bezierFlyFunc);
+      animate.easing(leafAnimateBuilder.scaleXAnimationTick(leafAnimateBuilder.scaleXOffsets[0], leafAnimateBuilder.scaleXOffsets[1]), 533, bezierFlyFunc);
+      animate.easing(leafAnimateBuilder.scaleYAnimationTick(leafAnimateBuilder.scaleYOffsets[0], leafAnimateBuilder.scaleYOffsets[1]), 533, bezierFlyFunc);
+      animate.easing(leafAnimateBuilder.rotateAnimationTick(leafAnimateBuilder.rotateOffsets[0], leafAnimateBuilder.rotateOffsets[1]), 533, bezierFlyFunc);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -402,8 +419,9 @@ const thirdResultAnimate = (resultCanvas) => {
       animations.push(`saturn`);
       runSerial(saturnTranslateXAnimates);
       runSerial(saturnTranslateYAnimates);
-      animate.easing(saturnScaleAnimationTick(saturnScale, saturnScaleTo), 617, bezierFlyFunc);
-      animate.easing(saturnRotateAnimationTick(saturnRotate, saturnRotateTo), 617, bezierFlyFunc);
+      animate.easing(saturnAnimateBuilder.scaleXAnimationTick(saturnAnimateBuilder.scaleXOffsets[0], saturnAnimateBuilder.scaleXOffsets[1]), 617, bezierFlyFunc);
+      animate.easing(saturnAnimateBuilder.scaleYAnimationTick(saturnAnimateBuilder.scaleYOffsets[0], saturnAnimateBuilder.scaleYOffsets[1]), 617, bezierFlyFunc);
+      animate.easing(saturnAnimateBuilder.rotateAnimationTick(saturnAnimateBuilder.rotateOffsets[0], saturnAnimateBuilder.rotateOffsets[1]), 617, bezierFlyFunc);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -413,8 +431,9 @@ const thirdResultAnimate = (resultCanvas) => {
       animations.push(`flamingo`);
       runSerial(flamingoTranslateXAnimates);
       runSerial(flamingoTranslateYAnimates);
-      animate.easing(flamingoScaleAnimationTick(flamingoScale, flamingoScaleTo), 617, bezierFlyFunc);
-      animate.easing(flamingoRotateAnimationTick(flamingoRotate, flamingoRotateTo), 617, bezierFlyFunc);
+      animate.easing(flamingoAnimateBuilder.scaleYAnimationTick(flamingoAnimateBuilder.scaleYOffsets[0], flamingoAnimateBuilder.scaleYOffsets[1]), 617, bezierFlyFunc);
+      animate.easing(flamingoAnimateBuilder.scaleXAnimationTick(flamingoAnimateBuilder.scaleXOffsets[0], flamingoAnimateBuilder.scaleXOffsets[1]), 617, bezierFlyFunc);
+      animate.easing(flamingoAnimateBuilder.rotateAnimationTick(flamingoAnimateBuilder.rotateOffsets[0], flamingoAnimateBuilder.rotateOffsets[1]), 617, bezierFlyFunc);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -424,8 +443,9 @@ const thirdResultAnimate = (resultCanvas) => {
       animations.push(`watermelon`);
       runSerial(watermelonTranslateXAnimates);
       runSerial(watermelonTranslateYAnimates);
-      animate.easing(watermelonScaleAnimationTick(watermelonScale, watermelonScaleTo), 533, bezierFlyFunc);
-      animate.easing(watermelonRotateAnimationTick(watermelonRotate, watermelonRotateTo), 533, bezierFlyFunc);
+      animate.easing(watermelonAnimateBuilder.scaleYAnimationTick(watermelonAnimateBuilder.scaleYOffsets[0], watermelonAnimateBuilder.scaleYOffsets[1]), 533, bezierFlyFunc);
+      animate.easing(watermelonAnimateBuilder.scaleXAnimationTick(watermelonAnimateBuilder.scaleXOffsets[0], watermelonAnimateBuilder.scaleXOffsets[1]), 533, bezierFlyFunc);
+      animate.easing(watermelonAnimateBuilder.rotateAnimationTick(watermelonAnimateBuilder.rotateOffsets[0], watermelonAnimateBuilder.rotateOffsets[1]), 533, bezierFlyFunc);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -435,8 +455,9 @@ const thirdResultAnimate = (resultCanvas) => {
       animations.push(`snowflake`);
       runSerial(snowflakeTranslateXAnimates);
       runSerial(snowflakeTranslateYAnimates);
-      animate.easing(snowflakeScaleAnimationTick(snowflakeScale, snowflakeScaleTo), 683, bezierFlyFunc);
-      animate.easing(snowflakeRotateAnimationTick(snowflakeRotate, snowflakeRotateTo), 683, bezierFlyFunc);
+      animate.easing(snowflakeAnimateBuilder.scaleYAnimationTick(snowflakeAnimateBuilder.scaleYOffsets[0], snowflakeAnimateBuilder.scaleYOffsets[1]), 683, bezierFlyFunc);
+      animate.easing(snowflakeAnimateBuilder.scaleXAnimationTick(snowflakeAnimateBuilder.scaleXOffsets[0], snowflakeAnimateBuilder.scaleXOffsets[1]), 683, bezierFlyFunc);
+      animate.easing(snowflakeAnimateBuilder.rotateAnimationTick(snowflakeAnimateBuilder.rotateOffsets[0], snowflakeAnimateBuilder.rotateOffsets[1]), 683, bezierFlyFunc);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -444,8 +465,14 @@ const thirdResultAnimate = (resultCanvas) => {
   const globalCrocodileAnimationTick = (globalProgress) => {
     if (globalProgress >= 0 && animations.indexOf(`crocodile`) === -1) {
       animations.push(`crocodile`);
-      animate.easing(crocodileTranslateXAnimationTick(crocodileTranslateX, 0), 600, bezierCrocodileFunc);
-      animate.easing(crocodileTranslateYAnimationTick(crocodileTranslateY, 0), 600, bezierCrocodileFunc);
+      animate.easing(
+          crocodileAnimateBuilder.translateXAnimationTick(crocodileAnimateBuilder.translateXOffsets[0], crocodileAnimateBuilder.translateXOffsets[1]),
+          600,
+          bezierCrocodileFunc);
+      animate.easing(
+          crocodileAnimateBuilder.translateYAnimationTick(crocodileAnimateBuilder.translateYOffsets[0], crocodileAnimateBuilder.translateYOffsets[1]),
+          600,
+          bezierCrocodileFunc);
     }
     drawResultCanvas(resultCanvas);
   };
