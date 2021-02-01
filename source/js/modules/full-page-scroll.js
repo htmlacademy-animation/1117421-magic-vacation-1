@@ -3,6 +3,7 @@ import {screenNames} from "./utils";
 import {animateText} from "./text-animate";
 import {animatePrizes} from "./prizes-animate";
 import {startGameTimer, resetGameTimer} from "./game-timer";
+import {changeScreenScene} from "./screen-scene";
 
 export default class FullPageScroll {
   constructor() {
@@ -19,8 +20,12 @@ export default class FullPageScroll {
   init() {
     document.addEventListener(`wheel`, throttle(this.onScrollHandler, this.THROTTLE_TIMEOUT, {trailing: true}));
     window.addEventListener(`popstate`, this.onUrlHashChengedHandler);
+    document.body.addEventListener(`slideChanged`, (evt) => {
+      this.emitChangeDisplayEvent(evt.detail.slideId);
+    });
 
     this.onUrlHashChanged();
+    changeScreenScene(this.screenElements[this.activeScreen].id);
   }
 
   onScroll(evt) {
@@ -101,10 +106,11 @@ export default class FullPageScroll {
     }
   }
 
-  emitChangeDisplayEvent() {
+  emitChangeDisplayEvent(slideId = 0) {
     const event = new CustomEvent(`screenChanged`, {
       detail: {
         'screenId': this.activeScreen,
+        'slideId': slideId,
         'screenName': this.screenElements[this.activeScreen].id,
         'screenElement': this.screenElements[this.activeScreen]
       }

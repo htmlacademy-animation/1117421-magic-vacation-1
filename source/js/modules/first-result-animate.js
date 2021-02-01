@@ -1,6 +1,7 @@
-import {runSerial} from "../helpers/promise";
+import {runSerial, runSerialLoop} from "../helpers/promise";
 import animate from "../helpers/animate";
-import {bezierEasing} from "../helpers/cubicBezier";
+import {bezierEasing} from "../helpers/cubic-bezier";
+import AnimateBuilder from "../helpers/animate-builder";
 
 const rotateObject = (ctx, angle, cx, cy) => {
   ctx.translate(cx, cy);
@@ -68,121 +69,73 @@ const animations = [];
 const bezierFunc = bezierEasing(0.33, 0, 0.67, 1);
 
 // параметры анимации для следа от самолета
-let backOpacity = 0;
-let backScale = 0;
-let backOpacityTo = 1;
-let backScaleTo = 1;
-const backOpacityAnimationTick = (from, to) => (progress) => {
-  backOpacity = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const backScaleAnimationTick = (from, to) => (progress) => {
-  backScale = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const backAnimateBuilder = new AnimateBuilder({
+  opacityOffsets: [0, 1],
+  scaleXOffsets: [0, 1],
+  scaleYOffsets: [0, 1]}
+);
 
 // параметры анимации для самолета
-const airplaneTranslateYOffsets = [-63 * wFactor, 0];
-const airplaneTranslateXOffsets = [-397 * wFactor, 0];
-const airplaneRotateOffsets = [63, 74, 63, 0];
-let airplaneTranslateY = airplaneTranslateYOffsets[0];
-let airplaneTranslateX = airplaneTranslateXOffsets[0];
-let airplaneRotateAngle = airplaneRotateOffsets[0];
-const airplaneTranslateYAnimationTick = (from, to) => (progress) => {
-  airplaneTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const airplaneTranslateXAnimationTick = (from, to) => (progress) => {
-  airplaneTranslateX = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const airplaneRotateAnimationTick = (from, to) => (progress) => {
-  airplaneRotateAngle = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const airplaneAnimateBuilder = new AnimateBuilder({
+  rotateOffsets: [63, 74, 63, 0],
+  translateYOffsets: [-63 * wFactor, 0],
+  translateXOffsets: [-397 * wFactor, 0]}
+);
 const airplaneRotateAnimates = [
-  () => animate.easing(airplaneRotateAnimationTick(airplaneRotateOffsets[0], airplaneRotateOffsets[1]), 133, bezierFunc),
-  () => animate.easing(airplaneRotateAnimationTick(airplaneRotateOffsets[1], airplaneRotateOffsets[2]), 67, bezierFunc),
-  () => animate.easing(airplaneRotateAnimationTick(airplaneRotateOffsets[2], airplaneRotateOffsets[3]), 367, bezierFunc),
+  () => animate.easing(airplaneAnimateBuilder.rotateAnimationTick(airplaneAnimateBuilder.rotateOffsets[0], airplaneAnimateBuilder.rotateOffsets[1]), 133, bezierFunc),
+  () => animate.easing(airplaneAnimateBuilder.rotateAnimationTick(airplaneAnimateBuilder.rotateOffsets[1], airplaneAnimateBuilder.rotateOffsets[2]), 67, bezierFunc),
+  () => animate.easing(airplaneAnimateBuilder.rotateAnimationTick(airplaneAnimateBuilder.rotateOffsets[2], airplaneAnimateBuilder.rotateOffsets[3]), 367, bezierFunc),
 ];
 
 // параметры анимации для дерева
-let treeOpacity = 0;
-let treeSecondOpacity = 1;
-let treeTranslateY = 200 * wFactor;
-let treeSecondTranslateY = 120 * wFactor;
-let treeOpacityTo = 1;
-const treeOpacityAnimationTick = (from, to) => (progress) => {
-  treeOpacity = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const treeTranslateYAnimationTick = (from, to) => (progress) => {
-  treeTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const treeSecondOpacityAnimationTick = (from, to) => (progress) => {
-  treeSecondOpacity = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const treeSecondTranslateYAnimationTick = (from, to) => (progress) => {
-  treeSecondTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const treeAnimateBuilder = new AnimateBuilder({
+  opacityOffsets: [0, 1],
+  translateYOffsets: [200 * wFactor, 0]}
+);
+const treeSecondAnimateBuilder = new AnimateBuilder({
+  opacityOffsets: [0, 1],
+  translateYOffsets: [120 * wFactor, 0]}
+);
 
 // параметры анимации для снежинки
-const snowflakeTranslateYOffset = 10 * wFactor;
+const snowflakeLeftAnimateBuilder = new AnimateBuilder({
+  opacityOffsets: [0, 1],
+  translateYOffsets: [-10, 10]}
+);
+const snowflakeRightAnimateBuilder = new AnimateBuilder({
+  opacityOffsets: [0, 1],
+  translateYOffsets: [10, -10]}
+);
 const snowflakeLeftOpacityDelay = 150;
 const snowflakeRightOpacityDelay = 200;
-let snowflakeLeftOpacity = 0;
-let snowflakeLeftOpacityTo = 1;
-let snowflakeRightOpacity = 0;
-let snowflakeRightOpacityTo = 1;
-let snowflakeLeftTranslateY = -snowflakeTranslateYOffset;
-let snowflakeRightTranslateY = snowflakeTranslateYOffset;
-const snowflakeLeftTranslateYAnimationTick = (from, to) => (progress) => {
-  snowflakeLeftTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const snowflakeRightTranslateYAnimationTick = (from, to) => (progress) => {
-  snowflakeRightTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const snowflakeLeftOpacityAnimationTick = (from, to) => (progress) => {
-  snowflakeLeftOpacity = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const snowflakeRightOpacityAnimationTick = (from, to) => (progress) => {
-  snowflakeRightOpacity = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
 const snowflakeLeftTranslateYAnimates = [
-  () => animate.easing(snowflakeLeftTranslateYAnimationTick(snowflakeLeftTranslateY, snowflakeTranslateYOffset), 1167, bezierFunc),
-  () => animate.easing(snowflakeLeftTranslateYAnimationTick(snowflakeTranslateYOffset, -snowflakeTranslateYOffset), 1167, bezierFunc),
-  () => animate.easing(snowflakeLeftTranslateYAnimationTick(-snowflakeTranslateYOffset, snowflakeTranslateYOffset), 1167, bezierFunc),
-  () => animate.easing(snowflakeLeftTranslateYAnimationTick(snowflakeTranslateYOffset, -snowflakeTranslateYOffset), 1167, bezierFunc),
-  () => animate.easing(snowflakeLeftTranslateYAnimationTick(-snowflakeTranslateYOffset, snowflakeTranslateYOffset), 1167, bezierFunc),
+  () => animate.easing(snowflakeLeftAnimateBuilder.translateYAnimationTick(snowflakeLeftAnimateBuilder.translateYOffsets[0], snowflakeLeftAnimateBuilder.translateYOffsets[1]), 1167, bezierFunc),
+  () => animate.easing(snowflakeLeftAnimateBuilder.translateYAnimationTick(snowflakeLeftAnimateBuilder.translateYOffsets[1], snowflakeLeftAnimateBuilder.translateYOffsets[0]), 1167, bezierFunc),
 ];
 const snowflakeRightTranslateYAnimates = [
-  () => animate.easing(snowflakeRightTranslateYAnimationTick(snowflakeRightTranslateY, -snowflakeTranslateYOffset), 1167, bezierFunc),
-  () => animate.easing(snowflakeRightTranslateYAnimationTick(-snowflakeTranslateYOffset, snowflakeTranslateYOffset), 1167, bezierFunc),
-  () => animate.easing(snowflakeRightTranslateYAnimationTick(snowflakeTranslateYOffset, -snowflakeTranslateYOffset), 1167, bezierFunc),
-  () => animate.easing(snowflakeRightTranslateYAnimationTick(-snowflakeTranslateYOffset, snowflakeTranslateYOffset), 1167, bezierFunc),
-  () => animate.easing(snowflakeRightTranslateYAnimationTick(snowflakeTranslateYOffset, -snowflakeTranslateYOffset), 1167, bezierFunc),
+  () => animate.easing(snowflakeRightAnimateBuilder.translateYAnimationTick(snowflakeRightAnimateBuilder.translateYOffsets[0], snowflakeRightAnimateBuilder.translateYOffsets[1]), 1167, bezierFunc),
+  () => animate.easing(snowflakeRightAnimateBuilder.translateYAnimationTick(snowflakeRightAnimateBuilder.translateYOffsets[1], snowflakeRightAnimateBuilder.translateYOffsets[0]), 1167, bezierFunc),
 ];
-
 // параметры анимации для моржа на льдине
-const sealTranslateYOffsets = [560 * wFactor, -26, 21, -12, 11, -7, 0];
-const sealRotateOffsets = [20, -4, 5, -4, 1, 0];
-let sealTranslateY = sealTranslateYOffsets[0];
-let sealRotateAngle = sealRotateOffsets[0];
-const sealTranslateYAnimationTick = (from, to) => (progress) => {
-  sealTranslateY = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
-const sealRotateAnimationTick = (from, to) => (progress) => {
-  sealRotateAngle = from + progress * Math.sign(to - from) * Math.abs(to - from);
-};
+const sealAnimateBuilder = new AnimateBuilder({
+  rotateOffsets: [20, -4, 5, -4, 1, 0],
+  translateYOffsets: [560 * wFactor, -26, 21, -12, 11, -7, 0]}
+);
 const sealRotateDelay = 300;
 const sealTranslateYAnimates = [
-  () => animate.easing(sealTranslateYAnimationTick(sealTranslateYOffsets[0], sealTranslateYOffsets[1]), 367, bezierFunc),
-  () => animate.easing(sealTranslateYAnimationTick(sealTranslateYOffsets[1], sealTranslateYOffsets[2]), 267, bezierFunc),
-  () => animate.easing(sealTranslateYAnimationTick(sealTranslateYOffsets[2], sealTranslateYOffsets[3]), 267, bezierFunc),
-  () => animate.easing(sealTranslateYAnimationTick(sealTranslateYOffsets[3], sealTranslateYOffsets[4]), 267, bezierFunc),
-  () => animate.easing(sealTranslateYAnimationTick(sealTranslateYOffsets[4], sealTranslateYOffsets[5]), 300, bezierFunc),
-  () => animate.easing(sealTranslateYAnimationTick(sealTranslateYOffsets[5], sealTranslateYOffsets[6]), 400, bezierFunc)
+  () => animate.easing(sealAnimateBuilder.translateYAnimationTick(sealAnimateBuilder.translateYOffsets[0], sealAnimateBuilder.translateYOffsets[1]), 367, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.translateYAnimationTick(sealAnimateBuilder.translateYOffsets[1], sealAnimateBuilder.translateYOffsets[2]), 267, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.translateYAnimationTick(sealAnimateBuilder.translateYOffsets[2], sealAnimateBuilder.translateYOffsets[3]), 267, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.translateYAnimationTick(sealAnimateBuilder.translateYOffsets[3], sealAnimateBuilder.translateYOffsets[4]), 267, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.translateYAnimationTick(sealAnimateBuilder.translateYOffsets[4], sealAnimateBuilder.translateYOffsets[5]), 300, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.translateYAnimationTick(sealAnimateBuilder.translateYOffsets[5], sealAnimateBuilder.translateYOffsets[6]), 400, bezierFunc)
 ];
 const sealRotateAnimates = [
-  () => animate.easing(sealRotateAnimationTick(sealRotateOffsets[0], sealRotateOffsets[1]), 267, bezierFunc),
-  () => animate.easing(sealRotateAnimationTick(sealRotateOffsets[1], sealRotateOffsets[2]), 267, bezierFunc),
-  () => animate.easing(sealRotateAnimationTick(sealRotateOffsets[2], sealRotateOffsets[3]), 267, bezierFunc),
-  () => animate.easing(sealRotateAnimationTick(sealRotateOffsets[3], sealRotateOffsets[4]), 300, bezierFunc),
-  () => animate.easing(sealRotateAnimationTick(sealRotateOffsets[4], sealRotateOffsets[5]), 400, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.rotateAnimationTick(sealAnimateBuilder.rotateOffsets[0], sealAnimateBuilder.rotateOffsets[1]), 267, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.rotateAnimationTick(sealAnimateBuilder.rotateOffsets[1], sealAnimateBuilder.rotateOffsets[2]), 267, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.rotateAnimationTick(sealAnimateBuilder.rotateOffsets[2], sealAnimateBuilder.rotateOffsets[3]), 267, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.rotateAnimationTick(sealAnimateBuilder.rotateOffsets[3], sealAnimateBuilder.rotateOffsets[4]), 300, bezierFunc),
+  () => animate.easing(sealAnimateBuilder.rotateAnimationTick(sealAnimateBuilder.rotateOffsets[4], sealAnimateBuilder.rotateOffsets[5]), 400, bezierFunc),
 ];
 
 const drawResultCanvas = (resultCanvas) => {
@@ -192,36 +145,86 @@ const drawResultCanvas = (resultCanvas) => {
   resultContext.clearRect(0, 0, windowWidth, windowHeight);
   resultContext.save();
 
-  resultContext.globalAlpha = backOpacity;
-  resultContext.drawImage(backImg, startPoint.x + sizes.back.deltaX, startPoint.y + sizes.back.deltaY, sizes.back.width * backScale, sizes.back.height * backScale);
-  rotateObject(resultContext, airplaneRotateAngle, startPoint.x + sizes.airplane.deltaX + airplaneTranslateX, startPoint.y + sizes.airplane.deltaY + airplaneTranslateY);
-  resultContext.drawImage(airplaneImg, startPoint.x + sizes.airplane.deltaX + airplaneTranslateX, startPoint.y + sizes.airplane.deltaY + airplaneTranslateY, sizes.airplane.width, sizes.airplane.height);
+  // рисуем след от самолета
+  resultContext.globalAlpha = backAnimateBuilder.opacity;
+  resultContext.drawImage(
+      backImg,
+      startPoint.x + sizes.back.deltaX,
+      startPoint.y + sizes.back.deltaY,
+      sizes.back.width * backAnimateBuilder.scaleX,
+      sizes.back.height * backAnimateBuilder.scaleY);
+
+  // рисуем самолет
+  rotateObject(
+      resultContext,
+      airplaneAnimateBuilder.rotate,
+      startPoint.x + sizes.airplane.deltaX + airplaneAnimateBuilder.translateX,
+      startPoint.y + sizes.airplane.deltaY + airplaneAnimateBuilder.translateY);
+  resultContext.drawImage(
+      airplaneImg,
+      startPoint.x + sizes.airplane.deltaX + airplaneAnimateBuilder.translateX,
+      startPoint.y + sizes.airplane.deltaY + airplaneAnimateBuilder.translateY,
+      sizes.airplane.width,
+      sizes.airplane.height);
   resultContext.restore();
   resultContext.save();
 
-  resultContext.globalAlpha = treeOpacity;
-  resultContext.drawImage(treeImg, startPoint.x + sizes.tree.deltaX, startPoint.y + sizes.tree.deltaY + treeTranslateY, sizes.tree.width, sizes.tree.height);
+  // рисуем деревья
+  resultContext.globalAlpha = treeAnimateBuilder.opacity;
+  resultContext.drawImage(
+      treeImg,
+      startPoint.x + sizes.tree.deltaX,
+      startPoint.y + sizes.tree.deltaY + treeAnimateBuilder.translateY,
+      sizes.tree.width,
+      sizes.tree.height);
   resultContext.restore();
   resultContext.save();
 
-  resultContext.globalAlpha = treeSecondOpacity;
-  resultContext.drawImage(treeSecondImg, startPoint.x + sizes.treeSecond.deltaX, startPoint.y + sizes.treeSecond.deltaY + treeSecondTranslateY, sizes.treeSecond.width, sizes.treeSecond.height);
+  resultContext.globalAlpha = treeSecondAnimateBuilder.opacity;
+  resultContext.drawImage(
+      treeSecondImg,
+      startPoint.x + sizes.treeSecond.deltaX,
+      startPoint.y + sizes.treeSecond.deltaY + treeSecondAnimateBuilder.translateY,
+      sizes.treeSecond.width,
+      sizes.treeSecond.height);
   resultContext.restore();
   resultContext.save();
 
-  rotateObject(resultContext, sealRotateAngle, startPoint.x, startPoint.y);
-  resultContext.drawImage(iceImg, startPoint.x, startPoint.y + sealTranslateY, sizes.ice.width, sizes.ice.height);
-  resultContext.drawImage(sealImg, startPoint.x + sizes.seal.deltaX, startPoint.y + sealTranslateY + sizes.seal.deltaY, sizes.seal.width, sizes.seal.height);
+  // рисуем моржа на льдине
+  rotateObject(resultContext, sealAnimateBuilder.rotate, startPoint.x, startPoint.y);
+  resultContext.drawImage(
+      iceImg,
+      startPoint.x,
+      startPoint.y + sealAnimateBuilder.translateY,
+      sizes.ice.width,
+      sizes.ice.height);
+  resultContext.drawImage(
+      sealImg,
+      startPoint.x + sizes.seal.deltaX,
+      startPoint.y + sealAnimateBuilder.translateY + sizes.seal.deltaY,
+      sizes.seal.width,
+      sizes.seal.height);
   resultContext.restore();
   resultContext.save();
 
-  resultContext.globalAlpha = snowflakeLeftOpacity;
-  resultContext.drawImage(snowflakeLeftImg, startPoint.x + sizes.snowflakeLeft.deltaX, startPoint.y + sizes.snowflakeLeft.deltaY + snowflakeLeftTranslateY, sizes.snowflakeLeft.width, sizes.snowflakeLeft.height);
+  // рисуем снежинки
+  resultContext.globalAlpha = snowflakeLeftAnimateBuilder.opacity;
+  resultContext.drawImage(
+      snowflakeLeftImg,
+      startPoint.x + sizes.snowflakeLeft.deltaX,
+      startPoint.y + sizes.snowflakeLeft.deltaY + snowflakeLeftAnimateBuilder.translateY,
+      sizes.snowflakeLeft.width,
+      sizes.snowflakeLeft.height);
   resultContext.restore();
   resultContext.save();
 
-  resultContext.globalAlpha = snowflakeRightOpacity;
-  resultContext.drawImage(snowflakeRightImg, startPoint.x + sizes.snowflakeRight.deltaX, startPoint.y + sizes.snowflakeRight.deltaY + snowflakeRightTranslateY, sizes.snowflakeRight.width, sizes.snowflakeRight.height);
+  resultContext.globalAlpha = snowflakeRightAnimateBuilder.opacity;
+  resultContext.drawImage(
+      snowflakeRightImg,
+      startPoint.x + sizes.snowflakeRight.deltaX,
+      startPoint.y + sizes.snowflakeRight.deltaY + snowflakeRightAnimateBuilder.translateY,
+      sizes.snowflakeRight.width,
+      sizes.snowflakeRight.height);
   resultContext.restore();
   resultContext.save();
 };
@@ -249,8 +252,9 @@ const firstResultAnimate = (resultCanvas) => {
   const globalBackAnimationTick = (globalProgress) => {
     if (globalProgress >= 0 && animations.indexOf(`back`) === -1) {
       animations.push(`back`);
-      animate.easing(backOpacityAnimationTick(backOpacity, backOpacityTo), 200, bezierFunc);
-      animate.easing(backScaleAnimationTick(backScale, backScaleTo), 567, bezierFunc);
+      animate.easing(backAnimateBuilder.opacityAnimationTick(backAnimateBuilder.opacityOffsets[0], backAnimateBuilder.opacityOffsets[1]), 200, bezierFunc);
+      animate.easing(backAnimateBuilder.scaleXAnimationTick(backAnimateBuilder.scaleXOffsets[0], backAnimateBuilder.scaleXOffsets[1]), 567, bezierFunc);
+      animate.easing(backAnimateBuilder.scaleYAnimationTick(backAnimateBuilder.scaleYOffsets[0], backAnimateBuilder.scaleYOffsets[1]), 567, bezierFunc);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -258,18 +262,18 @@ const firstResultAnimate = (resultCanvas) => {
     if (globalProgress >= 0 && animations.indexOf(`airplane`) === -1) {
       animations.push(`airplane`);
       runSerial(airplaneRotateAnimates);
-      animate.easing(airplaneTranslateYAnimationTick(airplaneTranslateYOffsets[0], airplaneTranslateYOffsets[1]), 567, bezierFunc);
-      animate.easing(airplaneTranslateXAnimationTick(airplaneTranslateXOffsets[0], airplaneTranslateXOffsets[1]), 567, bezierFunc);
+      animate.easing(airplaneAnimateBuilder.translateYAnimationTick(airplaneAnimateBuilder.translateYOffsets[0], airplaneAnimateBuilder.translateYOffsets[1]), 567, bezierFunc);
+      animate.easing(airplaneAnimateBuilder.translateXAnimationTick(airplaneAnimateBuilder.translateXOffsets[0], airplaneAnimateBuilder.translateXOffsets[1]), 567, bezierFunc);
     }
     drawResultCanvas(resultCanvas);
   };
   const globalTreeAnimationTick = (globalProgress) => {
     if (globalProgress >= 0 && animations.indexOf(`tree`) === -1) {
       animations.push(`tree`);
-      animate.easing(treeOpacityAnimationTick(treeOpacity, treeOpacityTo), 567, bezierFunc);
-      animate.easing(treeTranslateYAnimationTick(treeTranslateY, 0), 567, bezierFunc);
-      animate.easing(treeSecondOpacityAnimationTick(treeSecondOpacity, treeOpacityTo), 433, bezierFunc);
-      animate.easing(treeSecondTranslateYAnimationTick(treeSecondTranslateY, 0), 433, bezierFunc);
+      animate.easing(treeAnimateBuilder.opacityAnimationTick(treeAnimateBuilder.opacityOffsets[0], treeAnimateBuilder.opacityOffsets[1]), 567, bezierFunc);
+      animate.easing(treeAnimateBuilder.translateYAnimationTick(treeAnimateBuilder.translateYOffsets[0], treeAnimateBuilder.translateYOffsets[1]), 567, bezierFunc);
+      animate.easing(treeSecondAnimateBuilder.opacityAnimationTick(treeSecondAnimateBuilder.opacityOffsets[0], treeSecondAnimateBuilder.opacityOffsets[1]), 433, bezierFunc);
+      animate.easing(treeSecondAnimateBuilder.translateYAnimationTick(treeSecondAnimateBuilder.translateYOffsets[0], treeSecondAnimateBuilder.translateYOffsets[1]), 433, bezierFunc);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -289,17 +293,28 @@ const firstResultAnimate = (resultCanvas) => {
     }
     drawResultCanvas(resultCanvas);
   };
-  const globalSnowFlakeTranslateAnimationTick = (globalProgress) => {
-    if (globalProgress >= 0 && animations.indexOf(`snowflake`) === -1) {
-      animations.push(`snowflake`);
-      runSerial(snowflakeLeftTranslateYAnimates);
-      runSerial(snowflakeRightTranslateYAnimates);
+  const globalSnowFlakeLeftOpacityAnimationTick = (globalProgress) => {
+    if (globalProgress >= 0 && animations.indexOf(`snowflake-left`) === -1) {
+      animations.push(`snowflake-left`);
       setTimeout(() => {
-        animate.easing(snowflakeLeftOpacityAnimationTick(snowflakeLeftOpacity, snowflakeLeftOpacityTo), 633, bezierFunc);
+        animate.easing(snowflakeLeftAnimateBuilder.opacityAnimationTick(snowflakeLeftAnimateBuilder.opacityOffsets[0], snowflakeLeftAnimateBuilder.opacityOffsets[1]), 633, bezierFunc);
       }, snowflakeLeftOpacityDelay);
+    }
+    drawResultCanvas(resultCanvas);
+  };
+  const globalSnowFlakeRightOpacityAnimationTick = (globalProgress) => {
+    if (globalProgress >= 0 && animations.indexOf(`snowflake-right`) === -1) {
+      animations.push(`snowflake-right`);
       setTimeout(() => {
-        animate.easing(snowflakeRightOpacityAnimationTick(snowflakeRightOpacity, snowflakeRightOpacityTo), 633, bezierFunc);
+        animate.easing(snowflakeRightAnimateBuilder.opacityAnimationTick(snowflakeRightAnimateBuilder.opacityOffsets[0], snowflakeRightAnimateBuilder.opacityOffsets[1]), 633, bezierFunc);
       }, snowflakeRightOpacityDelay);
+    }
+    drawResultCanvas(resultCanvas);
+  };
+  const globalSnowFlakeTranslateAnimationTick = (globalProgress) => {
+    if (globalProgress >= 0) {
+      runSerial(snowflakeRightTranslateYAnimates);
+      runSerial(snowflakeLeftTranslateYAnimates);
     }
     drawResultCanvas(resultCanvas);
   };
@@ -312,7 +327,12 @@ const firstResultAnimate = (resultCanvas) => {
       animate.duration(globalTreeAnimationTick, 567);
       animate.duration(globalSealTranslateAnimationTick, 1867);
       animate.duration(globalSealRotateAnimationTick, 1867);
-      animate.duration(globalSnowFlakeTranslateAnimationTick, 7000);
+      animate.duration(globalSnowFlakeLeftOpacityAnimationTick, 633);
+      animate.duration(globalSnowFlakeRightOpacityAnimationTick, 633);
+      const globalSnowflakeAnimates = [
+        () => animate.duration(globalSnowFlakeTranslateAnimationTick, 2334)
+      ];
+      runSerialLoop(globalSnowflakeAnimates);
     };
   });
 
