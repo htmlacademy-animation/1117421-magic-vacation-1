@@ -729,5 +729,63 @@
 
 </main>
 
+<script id="simpleVertexShader" type='x-shader/x-vertex'>
+  uniform mat4 projectionMatrix;
+  uniform mat4 modelMatrix;
+  uniform mat4 viewMatrix;
+
+  attribute vec3 position;
+  attribute vec3 normal;
+  attribute vec2 uv;
+
+  varying vec2 vUv;
+
+  void main() {
+    vUv = uv;
+
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
+  }
+</script>
+<script id="simpleFragmentShader" type='x-shader/x-fragment'>
+  precision mediump float;
+
+  uniform sampler2D map;
+
+  varying vec2 vUv;
+
+  void main() {
+
+    vec4 texel = texture2D( map, vUv );
+
+    gl_FragColor = texel;
+  }
+</script>
+<script id="hueFragmentShader" type='x-shader/x-fragment'>
+  precision mediump float;
+
+  uniform sampler2D map;
+  uniform float hueAngle;
+
+  varying vec2 vUv;
+
+  float hueAngleRad = radians(hueAngle);
+  float cos = cos(hueAngleRad);
+  float sin = sin(hueAngleRad);
+  float lumR = 0.213;
+  float lumG = 0.715;
+  float lumB = 0.072;
+  mat4 colorMatrix = mat4(
+    lumR + cos * (1.0 - lumR) + sin * (-lumR), lumG + cos * (-lumG) + sin * (-lumG), lumB + cos * (-lumB) + sin * (1.0 - lumB), 0,
+    lumR + cos * (-lumR) + sin * (0.143), lumG + cos * (1.0 - lumG) + sin * (0.140), lumB + cos * (-lumB) + sin * (-0.283), 0,
+    lumR + cos * (-lumR) + sin * (-(1.0 - lumR)), lumG + cos * (-lumG) + sin * (lumG), lumB + cos * (1.0 - lumB) + sin * (lumB), 0,
+    0, 0, 0, 1.0
+  );
+
+  void main() {
+    vec4 texel = texture2D( map, vUv );
+
+    gl_FragColor = texel * colorMatrix;
+  }
+</script>
 </body>
 </html>

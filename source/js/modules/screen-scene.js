@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {setup3d, simpleVertexShader, simpleFragmentShader} from "../helpers/3d";
+import {setup3d} from "../helpers/3d";
 import {screenNames} from "./utils";
 
 const screens = [
@@ -33,14 +33,17 @@ const textureLoader = new THREE.TextureLoader();
 textureLoader.crossOrigin = ``;
 const textures = images.map((image) => textureLoader.load(image));
 
-const getMaterial = (texture) => new THREE.RawShaderMaterial({
+const getMaterial = (texture, hueAngle) => new THREE.RawShaderMaterial({
   uniforms: {
     map: {
       value: texture
     },
+    hueAngle: {
+      value: hueAngle
+    }
   },
-  vertexShader: simpleVertexShader,
-  fragmentShader: simpleFragmentShader
+  vertexShader: document.getElementById(`simpleVertexShader`).textContent,
+  fragmentShader: document.getElementById(`hueFragmentShader`).textContent
 });
 const getPlane = (material, width, height) => {
   const geometry = new THREE.PlaneBufferGeometry(width, height);
@@ -65,7 +68,11 @@ const initScene = (name) => {
   let plane;
   const index = screens.findIndex((screen) => screen === name);
   if (index !== -1) {
-    material = getMaterial(textures[index]);
+    if (index === 2) {
+      material = getMaterial(textures[index], 330);
+    } else {
+      material = getMaterial(textures[index], 360);
+    }
     plane = getPlane(material, imageWidth, imageHeight);
   }
   scene.add(plane);
